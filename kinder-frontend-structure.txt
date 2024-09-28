@@ -1,0 +1,41 @@
+kinder-frontend/
+├── src/
+│   ├── components/
+│   │   ├── Auth/
+│   │   │   ├── Login.jsx
+│   │   │   └── Register.jsx
+│   │   ├── LandingPage/
+│   │   │   ├── Hero.jsx
+│   │   │   └── Info.jsx
+│   │   ├── Dashboard/
+│   │   │   ├── ParentDashboard.jsx
+│   │   │   └── TeacherDashboard.jsx
+│   │   └── shared/
+│   │       ├── Header.jsx
+│   │       └── Footer.jsx
+│   ├── pages/
+│   │   ├── LandingPage.jsx
+│   │   ├── LoginPage.jsx
+│   │   ├── RegisterPage.jsx
+│   │   └── DashboardPage.jsx
+│   ├── features/
+│   │   ├── auth/
+│   │   │   └── authSlice.js
+│   │   └── photos/
+│   │       └── photosSlice.js
+│   ├── app/
+│   │   └── store.js
+│   ├── api/
+│   │   └── api.js
+│   ├── utils/
+│   │   └── protectedRoute.js
+│   ├── styles/
+│   │   └── index.css
+│   ├── App.jsx
+│   └── main.jsx
+├── public/
+│   └── assets/
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
