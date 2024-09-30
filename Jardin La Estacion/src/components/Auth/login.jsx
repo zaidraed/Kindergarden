@@ -6,7 +6,6 @@ import { TextField, Button, Typography, Box } from "@mui/material";
 import { login, clearAuthError } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
-// ... (resto del código)
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Email inválido").required("Requerido"),
   password: Yup.string().required("Requerido"),
@@ -20,12 +19,10 @@ function Login() {
   );
 
   useEffect(() => {
-    // Limpiar el error de autenticación cuando el componente se monta
     dispatch(clearAuthError());
   }, [dispatch]);
 
   useEffect(() => {
-    // Redirigir al usuario a la página principal si está autenticado
     if (isAuthenticated) {
       navigate("/dashboard");
     }
@@ -54,7 +51,7 @@ function Login() {
               margin="normal"
               name="email"
               label="Email"
-              error={touched.email && errors.email}
+              error={touched.email && !!errors.email}
               helperText={touched.email && errors.email}
             />
             <Field
@@ -64,7 +61,7 @@ function Login() {
               name="password"
               label="Contraseña"
               type="password"
-              error={touched.password && errors.password}
+              error={touched.password && !!errors.password}
               helperText={touched.password && errors.password}
             />
             <Button

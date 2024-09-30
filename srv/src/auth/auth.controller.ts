@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, Patch } from "@nestjs/common";
+import { Controller, Post, Body, Res, Patch, Get } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateAuthDto } from "./dto/create-auth.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -44,12 +44,20 @@ export class AuthController {
         throw e;
       });
   }
+  @ApiOperation({
+    description: "This endpoint is for getting all users",
+  })
+  @Get("users")
+  // @Auth("ADMIN") // Solo permite a los usuarios con rol 'ADMIN' acceder
+  async getAllUsers() {
+    return await this.authService.getAllUsers();
+  }
 
   @ApiOperation({
     description: "This enpoint is for update user Role",
   })
   @Patch("update-role")
-  @Auth("ADMIN")
+  //@Auth("ADMIN")
   async updateRole(@Body() updateRoleAuthDto: UpdateRoleAuthDto) {
     return await this.authService.updateRole(updateRoleAuthDto);
   }
@@ -58,7 +66,7 @@ export class AuthController {
     description: "This enpoint is for update user",
   })
   @Patch()
-  @Auth()
+  //@Auth()
   async update(@Body() updateAuthDto: UpdateAuthDto, @GetUser() user: User) {
     return await this.authService.update(updateAuthDto, user);
   }

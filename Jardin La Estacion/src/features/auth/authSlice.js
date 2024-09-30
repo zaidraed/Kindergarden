@@ -8,11 +8,12 @@ export const login = createAsyncThunk(
       const response = await api.post("/auth/login", credentials);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
   }
 );
 
+// Thunk para registrar un nuevo usuario
 export const register = createAsyncThunk(
   "auth/register",
   async (userData, thunkAPI) => {
@@ -20,23 +21,53 @@ export const register = createAsyncThunk(
       const response = await api.post("/auth/register", userData);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
   }
 );
 
+// Thunk para obtener usuarios (si es necesario)
+export const fetchUsers = createAsyncThunk("auth/fetchusers", async () => {
+  const response = await api.get("/auth/users");
+  console.log("fetchUsers:", response.data);
+  return response.data;
+});
+
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (userData) => {
+    const response = await api.patch(
+      `/auth/update-role/${userData.id}`,
+      userData
+    );
+    return response.data;
+  }
+);
+
+export const disableUser = createAsyncThunk(
+  "auth/disableUser",
+  async (userId) => {
+    await api.patch(`/auth/${userId}`);
+    return userId; // Retorna el ID para eliminar del estado
+  }
+);
+
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+  users: [],
+};
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    isAuthenticated: false,
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      // El token será eliminado en el backend cuando el usuario cierre sesión (logout)
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -69,7 +100,31 @@ const authSlice = createSlice({
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null; // Limpia cualquier error anterior
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false; // Detiene la carga
+        state.users = action.payload; // Guarda los usuarios
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false; // Detiene la carga
+        state.error = action.payload || "Error al obtener usuarios"; // Guarda el error
       });
+    //.addCase(updateUser.fulfilled, (state, action) => {
+    //  const index = state.users.findIndex(
+    //   (user) => user.id === action.payload.id
+    // );
+    //  if (index !== -1) {
+    //    state.users[index] = action.payload; // Actualizar el usuario
+    //  }
+    // })
+
+    //  .addCase(disableUser.fulfilled, (state, action) => {
+    //  state.users = state.users.filter((user) => user.id !== action.payload); // Eliminar usuario
+    // });
   },
 });
 

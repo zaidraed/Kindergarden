@@ -38,6 +38,10 @@ export class AuthService {
       handleErrorExceptions(error);
     }
   }
+  // Método para obtener todos los usuarios
+  async getAllUsers() {
+    return this.prisma.users.findMany(); // Asumiendo que tienes un modelo 'user'
+  }
 
   async findUserByEmail(email: string) {
     try {

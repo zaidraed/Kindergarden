@@ -1,81 +1,53 @@
-import { useEffect } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
+//import React from "react";
 import { useSelector } from "react-redux";
-import ParentDashboard from "../components/Dashboard/ParentDashboard";
-import TeacherDashboard from "../components/Dashboard/TeacherDashboard";
 import AdminDashboard from "../components/Dashboard/AdminDashboard";
+import TeacherDashboard from "../components/Dashboard/TeacherDashboard";
+import ParentDashboard from "../components/Dashboard/ParentDashboard";
 
-function DashboardPage() {
+const DashboardPage = () => {
   const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
 
   console.log("DashboardPage props:", { user, isAuthenticated, loading });
 
-  useEffect(() => {
-    console.log("DashboardPage rendered");
-    console.log("Auth state:", { user, isAuthenticated, loading });
-
-    if (user) {
-      console.log("User role:", user.Role);
-      console.log("User object:", user);
-    }
-  }, [user, isAuthenticated, loading]);
-
   if (loading) {
     console.log("Loading...");
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <div>Cargando...</div>;
   }
 
-  if (!isAuthenticated) {
-    console.log("Not authenticated");
-    return (
-      <Typography>Por favor, inicie sesión para ver el dashboard.</Typography>
-    );
+  if (!isAuthenticated || !user) {
+    console.log("User not authenticated or user data missing");
+    return <div>Por favor, inicie sesión para acceder al dashboard.</div>;
   }
 
-  if (!user || !user.Role) {
-    console.log("No user data");
-    return <Typography>Error: Información de usuario no disponible</Typography>;
-  }
+  console.log("DashboardPage rendered");
+  console.log("Auth state:", { user, isAuthenticated, loading });
+  console.log("User role:", user.Role);
+  console.log("User object:", user);
 
   const renderDashboard = () => {
-    const userRole = (user.Role || user.role || "").toUpperCase();
-    console.log("Rendering dashboard for role:", userRole);
-
-    try {
-      switch (userRole) {
-        case "PARENT":
-          console.log("Rendering ParentDashboard");
-          return <ParentDashboard user={user} />;
-        case "TEACHER":
-          console.log("Rendering TeacherDashboard");
-          return <TeacherDashboard user={user} />;
-        case "ADMIN":
-          console.log("Rendering AdminDashboard");
-          return <AdminDashboard user={user} />;
-        default:
-          console.error("Unrecognized role:", userRole);
-          return (
-            <Typography>Rol de usuario no reconocido: {userRole}</Typography>
-          );
-      }
-    } catch (error) {
-      console.error("Error rendering dashboard:", error);
-      return <Typography>Error al renderizar el dashboard.</Typography>;
+    console.log("Rendering dashboard for role:", user.Role);
+    switch (user.Role) {
+      case "ADMIN":
+        console.log("Rendering AdminDashboard");
+        return <AdminDashboard />;
+      case "TEACHER":
+        console.log("Rendering TeacherDashboard");
+        return <TeacherDashboard />;
+      case "PARENT":
+        console.log("Rendering ParentDashboard");
+        return <ParentDashboard />;
+      default:
+        console.log("Unknown role, rendering default message");
+        return <div>No se ha encontrado un dashboard para su rol.</div>;
     }
   };
 
-  return <Box sx={{ padding: 4 }}>{renderDashboard()}</Box>;
-}
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      {renderDashboard()}
+    </div>
+  );
+};
 
 export default DashboardPage;

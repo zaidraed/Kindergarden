@@ -1,65 +1,71 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Grid, Card, CardMedia, CardContent } from "@mui/material";
-import { fetchAllPhotos } from "../../features/photos/photosSlice";
-import PhotoUpload from "../../pages/PhotoUpload";
-import PropTypes from "prop-types";
+import { fetchUsers, updateUser } from "../../features/auth/authSlice";
+import styles from "../../styles/AdminDashboard.module.css";
 
-function AdminDashboard({ user }) {
+const AdminDashboard = () => {
   const dispatch = useDispatch();
-  const { photos, loading, error } = useSelector((state) => state.photos);
+  const { users, loading, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(fetchAllPhotos());
+    dispatch(fetchUsers())
+      .unwrap()
+      .then((data) => console.log("Usuarios:", data))
+      .catch((err) => console.error("Error al obtener usuarios:", err));
   }, [dispatch]);
 
-  if (loading) return <Typography>Cargando fotos...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-  if (!user || !user.id) {
-    return <Typography>Error: Información de usuario no disponible</Typography>;
-  }
+  const handleRoleChange = (userId, newRole) => {
+    dispatch(updateUser({ id: userId, Role: newRole }));
+  };
+
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Bienvenido, {user.name || "Profesor"}
-      </Typography>
-      <PhotoUpload userId={user.id} classroomId={user.classroomId} />
-      <Typography variant="h5" component="h2" gutterBottom>
-        Todas las Fotos
-      </Typography>
-      <Grid container spacing={2}>
-        {photos.map((photo) => (
-          <Grid item xs={12} sm={6} md={4} key={photo.id}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="200"
-                image={photo.url}
-                alt={`Foto de la clase ${photo.classId}`}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {photo.description}
-                </Typography>
-                <Typography variant="caption" display="block">
-                  Clase: {photo.classId} - Fecha:{" "}
-                  {new Date(photo.date).toLocaleDateString()}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+    <div className={styles.dashboard}>
+      <h1>Administrar Roles de Usuarios</h1>
+      {users.length === 0 ? (
+        <p>No hay usuarios disponibles.</p>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <select
+                    value={user.Role}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                  >
+                    <option value="TEACHER">Teacher</option>
+                    <option value="PARENT">Parent</option>
+                    <option value="ADMIN">Admin</option>
+                  </select>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleRoleChange(user.id, "DISABLED")}
+                    disabled={user.Role === "DISABLED"}
+                  >
+                    Deshabilitar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
-}
-
-AdminDashboard.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    classroomId: PropTypes.string,
-    id: PropTypes.string,
-  }),
 };
+
 export default AdminDashboard;
