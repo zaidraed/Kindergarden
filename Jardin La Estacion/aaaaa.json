@@ -1,0 +1,403 @@
+DashboardPage props: 
+{user: {…}, isAuthenticated: true, loading: false}
+isAuthenticated
+: 
+true
+loading
+: 
+false
+user
+: 
+{name: 'Zaid', email: 'zaidraed@gmail.com', Role: 'ADMIN', Active: true}
+[[Prototype]]
+: 
+Object
+DashboardPage.jsx:22 DashboardPage rendered
+DashboardPage.jsx:23 Auth state: 
+{user: {…}, isAuthenticated: true, loading: false}
+isAuthenticated
+: 
+true
+loading
+: 
+false
+user
+: 
+{name: 'Zaid', email: 'zaidraed@gmail.com', Role: 'ADMIN', Active: true}
+[[Prototype]]
+: 
+Object
+DashboardPage.jsx:24 User role: ADMIN
+DashboardPage.jsx:25 User object: 
+{name: 'Zaid', email: 'zaidraed@gmail.com', Role: 'ADMIN', Active: true}
+Active
+: 
+true
+Role
+: 
+"ADMIN"
+email
+: 
+"zaidraed@gmail.com"
+name
+: 
+"Zaid"
+[[Prototype]]
+: 
+Object
+DashboardPage.jsx:28 Rendering dashboard for role: ADMIN
+DashboardPage.jsx:31 Rendering AdminDashboard
+DashboardPage.jsx:10 DashboardPage props: 
+{user: {…}, isAuthenticated: true, loading: false}
+isAuthenticated
+: 
+true
+loading
+: 
+false
+user
+: 
+{name: 'Zaid', email: 'zaidraed@gmail.com', Role: 'ADMIN', Active: true}
+[[Prototype]]
+: 
+Object
+DashboardPage.jsx:22 DashboardPage rendered
+DashboardPage.jsx:23 Auth state: 
+{user: {…}, isAuthenticated: true, loading: false}
+isAuthenticated
+: 
+true
+loading
+: 
+false
+user
+: 
+Active
+: 
+true
+Role
+: 
+"ADMIN"
+email
+: 
+"zaidraed@gmail.com"
+name
+: 
+"Zaid"
+[[Prototype]]
+: 
+Object
+constructor
+: 
+ƒ Object()
+hasOwnProperty
+: 
+ƒ hasOwnProperty()
+isPrototypeOf
+: 
+ƒ isPrototypeOf()
+propertyIsEnumerable
+: 
+ƒ propertyIsEnumerable()
+toLocaleString
+: 
+ƒ toLocaleString()
+toString
+: 
+ƒ toString()
+valueOf
+: 
+ƒ valueOf()
+__defineGetter__
+: 
+ƒ __defineGetter__()
+__defineSetter__
+: 
+ƒ __defineSetter__()
+__lookupGetter__
+: 
+ƒ __lookupGetter__()
+__lookupSetter__
+: 
+ƒ __lookupSetter__()
+__proto__
+: 
+(...)
+get __proto__
+: 
+ƒ __proto__()
+set __proto__
+: 
+ƒ __proto__()
+[[Prototype]]
+: 
+Object
+constructor
+: 
+ƒ Object()
+hasOwnProperty
+: 
+ƒ hasOwnProperty()
+isPrototypeOf
+: 
+ƒ isPrototypeOf()
+propertyIsEnumerable
+: 
+ƒ propertyIsEnumerable()
+toLocaleString
+: 
+ƒ toLocaleString()
+toString
+: 
+ƒ toString()
+valueOf
+: 
+ƒ valueOf()
+__defineGetter__
+: 
+ƒ __defineGetter__()
+__defineSetter__
+: 
+ƒ __defineSetter__()
+__lookupGetter__
+: 
+ƒ __lookupGetter__()
+__lookupSetter__
+: 
+ƒ __lookupSetter__()
+__proto__
+: 
+(...)
+get __proto__
+: 
+ƒ __proto__()
+set __proto__
+: 
+ƒ __proto__()
+DashboardPage.jsx:24 User role: ADMIN
+DashboardPage.jsx:25 User object: 
+{name: 'Zaid', email: 'zaidraed@gmail.com', Role: 'ADMIN', Active: true}
+Active
+: 
+true
+Role
+: 
+"ADMIN"
+email
+: 
+"zaidraed@gmail.com"
+name
+: 
+"Zaid"
+[[Prototype]]
+: 
+Object
+DashboardPage.jsx:28 Rendering dashboard for role: ADMIN
+DashboardPage.jsx:31 Rendering AdminDashboard
+DashboardPage.jsx:10 DashboardPage props: 
+{user: {…}, isAuthenticated: true, loading: true}
+isAuthenticated
+: 
+true
+loading
+: 
+true
+user
+: 
+Active
+: 
+true
+Role
+: 
+"ADMIN"
+email
+: 
+"zaidraed@gmail.com"
+name
+: 
+"Zaid"
+[[Prototype]]
+: 
+Object
+[[Prototype]]
+: 
+Object
+constructor
+: 
+ƒ Object()
+hasOwnProperty
+: 
+ƒ hasOwnProperty()
+isPrototypeOf
+: 
+ƒ isPrototypeOf()
+propertyIsEnumerable
+: 
+ƒ propertyIsEnumerable()
+toLocaleString
+: 
+ƒ toLocaleString()
+toString
+: 
+ƒ toString()
+valueOf
+: 
+ƒ valueOf()
+__defineGetter__
+: 
+ƒ __defineGetter__()
+__defineSetter__
+: 
+ƒ __defineSetter__()
+__lookupGetter__
+: 
+ƒ __lookupGetter__()
+__lookupSetter__
+: 
+ƒ __lookupSetter__()
+__proto__
+: 
+(...)
+get __proto__
+: 
+ƒ __proto__()
+set __proto__
+: 
+ƒ __proto__()
+DashboardPage.jsx:13 Loading...
+DashboardPage.jsx:10 DashboardPage props: 
+{user: {…}, isAuthenticated: true, loading: true}
+isAuthenticated
+: 
+true
+loading
+: 
+true
+user
+: 
+Active
+: 
+true
+Role
+: 
+"ADMIN"
+email
+: 
+"zaidraed@gmail.com"
+name
+: 
+"Zaid"
+[[Prototype]]
+: 
+Object
+constructor
+: 
+ƒ Object()
+hasOwnProperty
+: 
+ƒ hasOwnProperty()
+isPrototypeOf
+: 
+ƒ isPrototypeOf()
+propertyIsEnumerable
+: 
+ƒ propertyIsEnumerable()
+toLocaleString
+: 
+ƒ toLocaleString()
+toString
+: 
+ƒ toString()
+valueOf
+: 
+ƒ valueOf()
+__defineGetter__
+: 
+ƒ __defineGetter__()
+__defineSetter__
+: 
+ƒ __defineSetter__()
+__lookupGetter__
+: 
+ƒ __lookupGetter__()
+__lookupSetter__
+: 
+ƒ __lookupSetter__()
+__proto__
+: 
+(...)
+get __proto__
+: 
+ƒ __proto__()
+set __proto__
+: 
+ƒ __proto__()
+[[Prototype]]
+: 
+Object
+constructor
+: 
+ƒ Object()
+hasOwnProperty
+: 
+ƒ hasOwnProperty()
+isPrototypeOf
+: 
+ƒ isPrototypeOf()
+propertyIsEnumerable
+: 
+ƒ propertyIsEnumerable()
+toLocaleString
+: 
+ƒ toLocaleString()
+toString
+: 
+ƒ toString()
+valueOf
+: 
+ƒ valueOf()
+__defineGetter__
+: 
+ƒ __defineGetter__()
+__defineSetter__
+: 
+ƒ __defineSetter__()
+__lookupGetter__
+: 
+ƒ __lookupGetter__()
+__lookupSetter__
+: 
+ƒ __lookupSetter__()
+__proto__
+: 
+(...)
+get __proto__
+: 
+ƒ __proto__()
+set __proto__
+: 
+ƒ __proto__()
+DashboardPage.jsx:13 Loading...
+authSlice.js:32 fetchUsers: 
+(5) [{…}, {…}, {…}, {…}, {…}]
+0
+: 
+{id: '66f5d78bcd7a08b4dddc5f85', name: 'Raed Zaid', password: '$2b$10$VAmVc0Xz3KW/azh.vxn2yOcfurPTrnWuqiRkvwnGVEho0YKhupJPi', email: 'samir@gmail.com', Role: 'ADMIN', …}
+1
+: 
+{id: '66f5d8b9cd7a08b4dddc5f86', name: 'malek', password: '$2b$10$4VTyzYmzaaT2WceqlrSE9O5o2LzPYTdyGooNz0uneCljmtQK12vNq', email: 'malek@gmail.com', Role: 'PARENT', …}
+2
+: 
+{id: '66f5dcf5cd7a08b4dddc5f88', name: 'Zaid', password: '$2b$10$lNkpL5e8uGKv4UbwrQc36eEnoH7Dp7Da1KUPkWK7YlaJOyCq7HYe.', email: 'adibraed1@gmail.com', Role: 'TEACHER', …}
+3
+: 
+{id: '66f5dfa7cd7a08b4dddc5f89', name: 'Zaid', password: '$2b$10$F4DzGWj2pFWDSROTlBGcfu6fIj3e6T3FPDGurWC6SDt6khR8PBL8K', email: '2121212121@gmail.com', Role: 'PARENT', …}
+4
+: 
+{id: '66f821358a035d79b2c6911d', name: 'Zaid', password: '$2b$10$5JMPzRxJMc9WLfQo3UDTMet0U7OssB/l1mru6DaC8uRS59Sy0XYs2', email: 'zaidraed@gmail.com', Role: 'ADMIN', …}
+length
+: 
+5
+[[Prototype]]
+: 
+Array(0)

@@ -24,7 +24,7 @@ function TeacherDashboard({ user }) {
       <Typography variant="h4" component="h1" gutterBottom>
         Bienvenido, {user.name || "Profesor"}
       </Typography>
-      {/* Elimina la referencia a classroomId */}
+
       <PhotoUpload userId={user.name} />
       <Typography variant="h5" component="h2" gutterBottom>
         Todas las Fotos
