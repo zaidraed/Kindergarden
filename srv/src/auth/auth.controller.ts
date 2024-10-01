@@ -65,9 +65,9 @@ export class AuthController {
   @ApiOperation({
     description: "This enpoint is for update user",
   })
-  @Patch()
+  @Patch("disable")
   //@Auth()
-  async update(@Body() updateAuthDto: UpdateAuthDto, @GetUser() user: User) {
-    return await this.authService.update(updateAuthDto, user);
+  async disableUser(@Body("email") email: string) {
+    return this.authService.disableUser(email);
   }
 }

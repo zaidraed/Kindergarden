@@ -110,17 +110,13 @@ export class AuthService {
     }
   }
 
-  async update(updateAuthDto: UpdateAuthDto, user: User) {
-    updateAuthDto.password = await hashingPassword(updateAuthDto.password);
-    return await this.prisma.users
-      .update({
-        where: {
-          id: user.id,
-        },
-        data: updateAuthDto,
-      })
-      .catch((e) => {
-        handleErrorExceptions(e);
-      });
+  async disableUser(email: string) {
+    const user = await this.findUserByEmail(email);
+    if (!user) throw new NotFoundException("User not found");
+
+    return this.prisma.users.update({
+      where: { email },
+      data: { Active: false }, // Suponiendo que `active` es el campo para desactivar
+    });
   }
 }

@@ -37,8 +37,8 @@ export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (userData) => {
     const response = await api.patch(
-      `/auth/update-role/${userData.id}`,
-      userData
+      `/auth/update-role`, // Ajusta la ruta a `/auth/update-role` ya que no necesita el id, sino el email
+      userData // Enviar el objeto userData que contiene el email y el rol
     );
     return response.data;
   }
@@ -46,9 +46,10 @@ export const updateUser = createAsyncThunk(
 
 export const disableUser = createAsyncThunk(
   "auth/disableUser",
-  async (userId) => {
-    await api.patch(`/auth/${userId}`);
-    return userId; // Retorna el ID para eliminar del estado
+  async (userEmail) => {
+    // Asegúrate de que el endpoint envíe el email, ya que parece que el backend lo necesita
+    await api.patch(`/auth/disable`, { email: userEmail }); // Asegúrate de que este endpoint esté configurado en tu backend
+    return userEmail; // Retorna el email para manejar el estado en el frontend
   }
 );
 

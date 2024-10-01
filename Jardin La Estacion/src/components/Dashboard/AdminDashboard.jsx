@@ -11,8 +11,8 @@ const AdminDashboard = () => {
   const { users, loading, error } = useSelector((state) => state.auth);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [role, setRole] = useState("");
-  const [isActive, setIsActive] = useState(true);
+  const [role, setRole] = useState(""); // Asegúrate de tener un valor por defecto
+  const [isActive, setIsActive] = useState(true); // Valor inicial true o false
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -24,8 +24,8 @@ const AdminDashboard = () => {
 
   const handleUserSelect = (user) => {
     setSelectedUser(user);
-    setRole(user.Role);
-    setIsActive(user.active);
+    setRole(user.Role || ""); // Asegúrate de que siempre tenga un valor, incluso si es una cadena vacía
+    setIsActive(user.active ?? true); // Usa `??` para evitar undefined
   };
 
   const handleUpdateUser = () => {
@@ -34,8 +34,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDisableUser = (userId) => {
-    dispatch(disableUser(userId));
+  const handleDisableUser = (userEmail) => {
+    dispatch(disableUser(userEmail));
   };
 
   const filteredUsers = users.filter((user) =>
@@ -67,9 +67,9 @@ const AdminDashboard = () => {
             <tr key={user.id} onClick={() => handleUserSelect(user)}>
               <td>{user.name}</td>
               <td>{user.Role}</td>
-              <td>{user.active ? "Sí" : "No"}</td>
+              <td>{user.Active ? "Sí" : "No"}</td>
               <td>
-                <button onClick={() => handleDisableUser(user.id)}>
+                <button onClick={() => handleDisableUser(user.email)}>
                   Desactivar
                 </button>
               </td>
