@@ -16,10 +16,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
 
-  app.enableCors({
-    origin: "http://localhost:5173", // URL del frontend
-    credentials: true, // Para enviar cookies si es necesario
-  });
+  const corsOptions: CorsOptions = {
+    origin: ['https://https://kindergarden-red.vercel.app/login'], // Aquí pones tu URL de Vercel o frontend permitido
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Si estás usando cookies o autenticación basada en sesiones
+  };
 
   await app.listen(3000);
 }
