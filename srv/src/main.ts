@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,11 +18,11 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
 
   const corsOptions: CorsOptions = {
-    origin: ['https://https://kindergarden-red.vercel.app/login'], // Aquí pones tu URL de Vercel o frontend permitido
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Si estás usando cookies o autenticación basada en sesiones
+    origin: ["https://kindergarden-red.vercel.app/login"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
   };
-   app.enableCors(corsOptions);
+  app.enableCors(corsOptions);
 
   await app.listen(3000);
 }
