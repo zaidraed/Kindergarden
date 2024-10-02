@@ -22,6 +22,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Si estás usando cookies o autenticación basada en sesiones
   };
+   app.enableCors(corsOptions);
 
   await app.listen(3000);
 }
