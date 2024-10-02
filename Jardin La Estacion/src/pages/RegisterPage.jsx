@@ -1,19 +1,13 @@
-//import React from "react";
-import { Box } from "@mui/material";
 import Register from "../components/Auth/Register";
+import styles from "../styles/Register.module.css";
 
 function RegisterPage() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Register />
-    </Box>
+    <div className={styles.container}>
+      <div className={styles.Register}>
+        <Register />
+      </div>
+    </div>
   );
 }
 

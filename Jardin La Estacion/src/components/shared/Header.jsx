@@ -1,8 +1,8 @@
 //import React from "react";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
+import styles from "../../styles/Header.module.css";
 
 function Header() {
   const dispatch = useDispatch();
@@ -15,44 +15,35 @@ function Header() {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Kinder Garden
-          </Typography>
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        <Link to="/" className={styles.link}>
+          <h1 className={styles.title}>Jardin De la Estacion</h1>
         </Link>
-        <Box>
+        <div className={styles.buttons}>
           {isAuthenticated ? (
             <>
-              <Button color="inherit" onClick={handleLogout}>
+              <button onClick={handleLogout} className={styles.button}>
                 Cerrar Sesión
-              </Button>
-              <Typography variant="body1" sx={{ ml: 2 }}>
-                Hola, {user.name}
-              </Typography>
+              </button>
+              <span className={styles.greeting}>Hola, {user.name}</span>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Button color="inherit">Iniciar Sesión</Button>
+              <Link to="/login" className={styles.link}>
+                <button className={styles.button}>Iniciar Sesión</button>
               </Link>
               <Link
                 to="/register"
-                style={{ textDecoration: "none", color: "inherit" }}
+                className={`${styles.link} ${styles.registerLink}`}
               >
-                <Button color="inherit" sx={{ ml: 2 }}>
-                  Registrarse
-                </Button>
+                <button className={styles.button}>Registrarse</button>
               </Link>
             </>
           )}
-        </Box>
-      </Toolbar>
-    </AppBar>
+        </div>
+      </nav>
+    </header>
   );
 }
 

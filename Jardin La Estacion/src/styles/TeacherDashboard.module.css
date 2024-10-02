@@ -1,0 +1,42 @@
+.container {
+  padding: 20px;
+  background-color: #eb5624;
+  color: white;
+  min-height: 100vh;
+}
+
+.header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  color: #eb5624;
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.upload-container {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  .card img {
+    height: 150px;
+  }
+}

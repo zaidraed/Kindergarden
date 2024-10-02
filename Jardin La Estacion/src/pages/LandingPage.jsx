@@ -1,35 +1,39 @@
 //import React from "react";
 import { Link } from "react-router-dom";
-import { Typography, Box, Button } from "@mui/material";
-
+import styles from "../styles/LandingPage.module.css";
+import logo from "../assets/logo.png";
 function LandingPage() {
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h2" component="h1" gutterBottom>
-        Bienvenido a Kinder Garden
-      </Typography>
-      <Typography variant="h5" gutterBottom>
-        Un lugar seguro y cálido para que tu hijo aprenda y crezca.
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        En Kinder Garden, nos esforzamos por brindar una educación de calidad a
-        nuestros alumnos. Contamos con un equipo de maestros altamente
-        capacitados y un entorno seguro y estimulante para que tu hijo pueda
-        desarrollarse plenamente.
-      </Typography>
-      <Box sx={{ mt: 4 }}>
-        <Link to="/login" style={{ textDecoration: "none" }}>
-          <Button variant="contained" color="primary">
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <header className={styles.header}>
+          <img
+            src={logo}
+            alt="Logo del Jardín La Estacion"
+            className={styles.logo}
+          />
+          <h1 className={styles.title}>Bienvenidos al Jardín De la Estacion</h1>
+        </header>
+        ;
+        <h2 className={styles.subtitle}>
+          Un lugar seguro y cálido para que tu hijo aprenda y crezca.
+        </h2>
+        <p className={styles.description}>
+          En Kinder Garden, nos esforzamos por brindar una educación de calidad
+          a nuestros alumnos. Contamos con un equipo de maestros altamente
+          capacitados y un entorno seguro y estimulante para que tu hijo pueda
+          desarrollarse plenamente.
+        </p>
+        <div className={styles.buttonContainer}>
+          <Link to="/login" className={styles.button}>
             Iniciar Sesión
-          </Button>
-        </Link>
-        <Link to="/register" style={{ textDecoration: "none", marginLeft: 2 }}>
-          <Button variant="contained" color="secondary">
+          </Link>
+          <Link to="/register" className={styles.button}>
             Registrarse
-          </Button>
-        </Link>
-      </Box>
-    </Box>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 

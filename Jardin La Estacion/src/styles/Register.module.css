@@ -1,0 +1,55 @@
+.container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff8e1;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #eb5624;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldContainer {
+  margin-bottom: 20px;
+}
+
+.field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.errorField {
+  border-color: red;
+}
+
+.submitButton {
+  background-color: #eb5624;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submitButton:disabled {
+  background-color: #ccc;
+}
+
+.errorText {
+  color: red;
+  margin-top: 5px;
+}

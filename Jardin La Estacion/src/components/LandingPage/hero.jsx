@@ -1,36 +1,23 @@
 //import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import styles from "../../styles/hero.module.css";
 
 function Hero() {
   return (
-    <Box
-      sx={{
-        bgcolor: "primary.main",
-        color: "white",
-        padding: 8,
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h2" component="h1" gutterBottom>
-        Bienvenido a Kinder Garden
-      </Typography>
-      <Typography variant="h5" gutterBottom>
+    <div className={styles.hero}>
+      <h1 className={styles.title}>Bienvenido a Kinder Garden</h1>
+      <h2 className={styles.subtitle}>
         Un lugar seguro y cálido para que tu hijo aprenda y crezca.
-      </Typography>
-      <Box sx={{ mt: 4 }}>
-        <Button variant="contained" color="secondary" href="/login">
+      </h2>
+      <div className={styles.buttonContainer}>
+        <Link to="/login" className={styles.button}>
           Iniciar Sesión
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          href="/register"
-          sx={{ ml: 2 }}
-        >
+        </Link>
+        <Link to="/register" className={styles.button}>
           Registrarse
-        </Button>
-      </Box>
-    </Box>
+        </Link>
+      </div>
+    </div>
   );
 }
 

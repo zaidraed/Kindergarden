@@ -1,20 +1,19 @@
-//import React from "react";
 import { useSelector } from "react-redux";
-import { Typography, Container } from "@mui/material";
 import AdminDashboard from "../components/Dashboard/AdminDashboard";
 import TeacherDashboard from "../components/Dashboard/TeacherDashboard";
 import ParentDashboard from "../components/Dashboard/ParentDashboard";
+import styles from "../styles/DashboardPage.module.css";
 
 const DashboardPage = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   if (!isAuthenticated || !user) {
     return (
-      <Container>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <div className={styles.container}>
+        <h1 className={styles.message}>
           Por favor, inicie sesión para acceder al dashboard.
-        </Typography>
-      </Container>
+        </h1>
+      </div>
     );
   }
 
@@ -28,14 +27,14 @@ const DashboardPage = () => {
         return <ParentDashboard user={user} />;
       default:
         return (
-          <Typography variant="h4" component="h1" gutterBottom>
+          <h1 className={styles.message}>
             Rol no reconocido. Contacte al administrador.
-          </Typography>
+          </h1>
         );
     }
   };
 
-  return <Container>{renderDashboard()}</Container>;
+  return <div className={styles.container}>{renderDashboard()}</div>;
 };
 
 export default DashboardPage;

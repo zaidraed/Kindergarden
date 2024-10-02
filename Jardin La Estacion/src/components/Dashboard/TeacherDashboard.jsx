@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Grid, Card, CardMedia, CardContent } from "@mui/material";
 import { fetchAllPhotos } from "../../features/photos/photosSlice";
 import PhotoUpload from "../../pages/PhotoUpload";
+import styles from "../../styles/TeacherDashboard.module.css";
 import PropTypes from "prop-types";
 
-function TeacherDashboard({ user }) {
+const TeacherDashboard = ({ user }) => {
   const dispatch = useDispatch();
   const { photos, loading, error } = useSelector((state) => state.photos);
 
@@ -13,53 +13,34 @@ function TeacherDashboard({ user }) {
     dispatch(fetchAllPhotos());
   }, [dispatch]);
 
-  if (loading) return <Typography>Cargando fotos...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading) return <p>Cargando fotos...</p>;
+  if (error) return <p>Error: {error}</p>;
   if (!user) {
-    return <Typography>Error: Información de usuario no disponible</Typography>;
+    return <p>Error: Información de usuario no disponible</p>;
   }
 
   return (
-    <div>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Bienvenido, {user.name || "Profesor"}
-      </Typography>
+    <div className={styles.container}>
+      <h1 className={styles.header}>Bienvenido, {user.name || "Profesor"}</h1>
 
-      <PhotoUpload userId={user.name} />
-      <Typography variant="h5" component="h2" gutterBottom>
-        Todas las Fotos
-      </Typography>
-      <Grid container spacing={2}>
+      <div className={styles["upload-container"]}>
+        <PhotoUpload userId={user.name} />
+      </div>
+
+      <h2>Todas las Fotos</h2>
+      <div className={styles.grid}>
         {photos.map((photo) => (
-          <Grid item xs={12} sm={6} md={4} key={photo.id}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="200"
-                image={photo.url}
-                alt={`Foto de la clase ${photo.classId}`}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {photo.description}
-                </Typography>
-                <Typography variant="caption" display="block">
-                  Clase: {photo.classroomId}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <div key={photo.id} className={styles.card}>
+            <img src={photo.url} alt={`Foto de la clase ${photo.classId}`} />
+            <p>Clase: {photo.classroomId}</p>
+            <p>Clase: {photo.description}</p>
+          </div>
         ))}
-      </Grid>
+      </div>
     </div>
   );
-}
-
-TeacherDashboard.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    classroomId: PropTypes.string,
-  }),
 };
-
+TeacherDashboard.propTypes = {
+  user: PropTypes.object.isRequired,
+};
 export default TeacherDashboard;

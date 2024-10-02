@@ -1,18 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  TextField,
-  Typography,
-  Box,
-  CircularProgress,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
 import { uploadPhoto } from "../features/photos/photosSlice";
 import PropTypes from "prop-types";
+import styles from "../styles/PhotoUpload.module.css";
 
 // Lista de aulas de ejemplo
 const classrooms = [
@@ -58,14 +48,10 @@ const PhotoUpload = ({ classroomId: initialClassroomId }) => {
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ "& > *": { margin: 1 } }}
-    >
-      <Typography variant="h6">Subir Nueva Foto</Typography>
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <h2 className={styles.title}>Subir Nueva Foto</h2>
 
-      <Button variant="contained" component="label">
+      <label className={styles.button}>
         Seleccionar Foto
         <input
           type="file"
@@ -73,49 +59,40 @@ const PhotoUpload = ({ classroomId: initialClassroomId }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
-      </Button>
-      {file && <Typography variant="body2">{file.name}</Typography>}
+      </label>
+      {file && <p className={styles.fileName}>{file.name}</p>}
 
-      <TextField
-        label="Descripción"
+      <textarea
+        className={styles.textField}
+        placeholder="Descripción"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        fullWidth
-        multiline
         rows={2}
       />
 
-      <FormControl fullWidth>
-        <InputLabel id="classroom-select-label">Aula</InputLabel>
-        <Select
-          labelId="classroom-select-label"
-          value={classroomId}
-          onChange={(e) => setClassroomId(e.target.value)}
-          label="Aula"
-        >
-          <MenuItem value="">
-            <em>Seleccione un aula</em>
-          </MenuItem>
-          {classrooms.map((classroom) => (
-            <MenuItem key={classroom.id} value={classroom.id}>
-              {classroom.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <select
+        className={styles.select}
+        value={classroomId}
+        onChange={(e) => setClassroomId(e.target.value)}
+      >
+        <option value="">Seleccione un aula</option>
+        {classrooms.map((classroom) => (
+          <option key={classroom.id} value={classroom.id}>
+            {classroom.name}
+          </option>
+        ))}
+      </select>
 
-      <Button
+      <button
         type="submit"
-        variant="contained"
-        color="primary"
+        className={styles.button}
         disabled={loading || !file || !classroomId || !description}
-        startIcon={loading && <CircularProgress size={20} />}
       >
         {loading ? "Subiendo..." : "Subir Foto"}
-      </Button>
+      </button>
 
-      {error && <Typography color="error">{error}</Typography>}
-    </Box>
+      {error && <p className={styles.error}>{error}</p>}
+    </form>
   );
 };
 

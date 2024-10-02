@@ -1,74 +1,59 @@
-.dashboard {
+.container {
+  width: 100%;
   padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
+  background-color: #eb5624;
+  color: white;
+  text-align: center;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 .table {
   width: 100%;
+  margin: 20px 0;
   border-collapse: collapse;
-  margin-bottom: 20px;
 }
 
 .table th,
 .table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  border: 1px solid #fff;
 }
 
-.table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-.table td {
+.button {
+  padding: 10px 20px;
   background-color: #fff;
-}
-
-.table tr:nth-child(even) td {
-  background-color: #f9f9f9;
-}
-
-select {
-  padding: 5px;
-  font-size: 14px;
-}
-
-button {
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #fff;
-  background-color: #007bff;
+  color: #eb5624;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 5px;
 }
 
-button:hover {
-  background-color: #0056b3;
+.button:hover {
+  background-color: #f4a15d;
 }
 
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+.selected-user {
+  background-color: white;
+  color: #eb5624;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
 }
 
-button + button {
-  margin-left: 10px;
-}
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
 
-.table td button {
-  margin-right: 10px;
-}
-
-.table td select {
-  margin-right: 10px;
+  .table th,
+  .table td {
+    padding: 8px;
+  }
 }

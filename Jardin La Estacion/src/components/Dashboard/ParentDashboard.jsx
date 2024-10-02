@@ -1,31 +1,14 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Modal,
-  IconButton,
-  Button,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { fetchClassroomPhotos } from "../../features/photos/photosSlice";
-
+import styles from "../../styles/ParentDashboard.module.css";
+import PropTypes from "prop-types";
 const ParentDashboard = ({ user }) => {
   const dispatch = useDispatch();
   const { photos, loading, error } = useSelector((state) => state.photos);
   const [selectedClassroom, setSelectedClassroom] = useState("");
   const [fullscreenPhotoIndex, setFullscreenPhotoIndex] = useState(null);
-
+  const controls = "modal-controls";
   useEffect(() => {
     if (selectedClassroom) {
       dispatch(fetchClassroomPhotos(selectedClassroom));
@@ -46,116 +29,59 @@ const ParentDashboard = ({ user }) => {
 
   const navigatePhoto = (direction) => {
     setFullscreenPhotoIndex((prevIndex) => {
-      if (prevIndex === null) return null; // Asegúrate de que prevIndex no sea null
-      const newIndex = (prevIndex + direction + photos.length) % photos.length; // Asegúrate de que el nuevo índice esté dentro de los límites
-      return newIndex; // Devuelve el nuevo índice
+      if (prevIndex === null) return null;
+      const newIndex = (prevIndex + direction + photos.length) % photos.length;
+      return newIndex;
     });
   };
 
-  if (loading) return <Typography>Cargando fotos...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading) return <p>Cargando fotos...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="p-4">
-      <Typography variant="h4" component="h1" className="mb-4">
-        Bienvenido, {user.name}
-      </Typography>
+    <div className={styles.container}>
+      <h1 className={styles.header}>Bienvenido, {user.name}</h1>
 
-      <FormControl fullWidth variant="outlined" className="mb-4">
-        <InputLabel>Aula</InputLabel>
-        <Select
-          value={selectedClassroom}
-          onChange={handleClassroomChange}
-          label="Aula"
-        >
-          <MenuItem value="aula1">Aula 1</MenuItem>
-          <MenuItem value="aula2">Aula 2</MenuItem>
-          <MenuItem value="aula3">Aula 3</MenuItem>
-        </Select>
-      </FormControl>
-
-      <Grid container spacing={2}>
-        {photos.map((photo, index) => (
-          <Grid item xs={6} sm={4} md={3} key={photo.id}>
-            <Card
-              onClick={() => openFullscreen(index)}
-              className="cursor-pointer"
-            >
-              <CardMedia
-                component="img"
-                className="w-full h-32 object-cover"
-                image={photo.url}
-                alt={`Foto de la clase ${photo.classId}`}
-              />
-              <CardContent>
-                <Typography variant="caption" display="block">
-                  Clase: {photo.classroomId}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Modal
-        open={fullscreenPhotoIndex !== null}
-        onClose={closeFullscreen}
-        className="flex items-center justify-center"
+      <select
+        className={styles["form-control"]}
+        value={selectedClassroom}
+        onChange={handleClassroomChange}
       >
-        <div className="relative bg-black w-full h-full flex flex-col">
-          <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-4 bg-gray-800 bg-opacity-75 z-10">
-            <Typography variant="h6" className="text-white">
-              Foto{" "}
-              {fullscreenPhotoIndex !== null ? fullscreenPhotoIndex + 1 : 0} de{" "}
-              {photos.length}
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={closeFullscreen}
-              startIcon={<CloseIcon />}
-            >
-              Cerrar
-            </Button>
-          </div>
-          <div className="flex-grow flex items-center justify-center p-4 overflow-hidden">
-            {fullscreenPhotoIndex !== null && (
-              <img
-                src={photos[fullscreenPhotoIndex]?.url}
-                alt={photos[fullscreenPhotoIndex]?.description}
-                className="max-w-full object-contain"
-                style={{ maxHeight: "90vh", width: "auto" }}
-              />
-            )}
-          </div>
-          <IconButton
-            onClick={() => navigatePhoto(-1)}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-gray-800 bg-opacity-75 hover:bg-opacity-100 z-10"
+        <option value="">Selecciona un aula</option>
+        <option value="aula1">Aula 1</option>
+        <option value="aula2">Aula 2</option>
+        <option value="aula3">Aula 3</option>
+      </select>
+
+      <div className={styles.grid}>
+        {photos.map((photo, index) => (
+          <div
+            key={photo.id}
+            className={styles.card}
+            onClick={() => openFullscreen(index)}
           >
-            <ChevronLeftIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => navigatePhoto(1)}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-gray-800 bg-opacity-75 hover:bg-opacity-100 z-10"
-          >
-            <ChevronRightIcon />
-          </IconButton>
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800 bg-opacity-75 z-10">
-            <Typography variant="body1" className="text-white">
-              {fullscreenPhotoIndex !== null &&
-                photos[fullscreenPhotoIndex]?.description}
-            </Typography>
+            <img src={photo.url} alt={`Foto de la clase ${photo.classId}`} />
+            <p>Clase: {photo.classroomId}</p>
+            <p>Clase: {photo.description}</p>
+          </div>
+        ))}
+      </div>
+
+      {fullscreenPhotoIndex !== null && (
+        <div className={styles.modal}>
+          <img src={photos[fullscreenPhotoIndex].url} alt="Imagen ampliada" />
+          <div className={styles.modal - controls}>
+            <button onClick={() => navigatePhoto(-1)}>Anterior</button>
+            <button onClick={closeFullscreen}>Cerrar</button>
+            <button onClick={() => navigatePhoto(1)}>Siguiente</button>
           </div>
         </div>
-      </Modal>
+      )}
     </div>
   );
 };
-
 ParentDashboard.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default ParentDashboard;

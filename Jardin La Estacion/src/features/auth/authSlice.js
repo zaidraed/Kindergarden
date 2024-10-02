@@ -29,17 +29,14 @@ export const register = createAsyncThunk(
 // Thunk para obtener usuarios (si es necesario)
 export const fetchUsers = createAsyncThunk("auth/fetchusers", async () => {
   const response = await api.get("/auth/users");
-  console.log("fetchUsers:", response.data);
+
   return response.data;
 });
 
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (userData) => {
-    const response = await api.patch(
-      `/auth/update-role`, // Ajusta la ruta a `/auth/update-role` ya que no necesita el id, sino el email
-      userData // Enviar el objeto userData que contiene el email y el rol
-    );
+    const response = await api.patch(`/auth/update-role`, userData);
     return response.data;
   }
 );
@@ -47,9 +44,8 @@ export const updateUser = createAsyncThunk(
 export const disableUser = createAsyncThunk(
   "auth/disableUser",
   async (userEmail) => {
-    // Asegúrate de que el endpoint envíe el email, ya que parece que el backend lo necesita
-    await api.patch(`/auth/disable`, { email: userEmail }); // Asegúrate de que este endpoint esté configurado en tu backend
-    return userEmail; // Retorna el email para manejar el estado en el frontend
+    await api.patch(`/auth/disable`, { email: userEmail });
+    return userEmail;
   }
 );
 
@@ -104,28 +100,16 @@ const authSlice = createSlice({
       })
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
-        state.error = null; // Limpia cualquier error anterior
+        state.error = null;
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.loading = false; // Detiene la carga
-        state.users = action.payload; // Guarda los usuarios
+        state.loading = false;
+        state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        state.loading = false; // Detiene la carga
-        state.error = action.payload || "Error al obtener usuarios"; // Guarda el error
+        state.loading = false;
+        state.error = action.payload || "Error al obtener usuarios";
       });
-    //.addCase(updateUser.fulfilled, (state, action) => {
-    //  const index = state.users.findIndex(
-    //   (user) => user.id === action.payload.id
-    // );
-    //  if (index !== -1) {
-    //    state.users[index] = action.payload; // Actualizar el usuario
-    //  }
-    // })
-
-    //  .addCase(disableUser.fulfilled, (state, action) => {
-    //  state.users = state.users.filter((user) => user.id !== action.payload); // Eliminar usuario
-    // });
   },
 });
 

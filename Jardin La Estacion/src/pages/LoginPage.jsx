@@ -1,19 +1,13 @@
-//import React from "react";
-import { Box } from "@mui/material";
 import Login from "../components/Auth/login";
+import styles from "../styles/LoginPage.module.css";
 
 function LoginPage() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Login />
-    </Box>
+    <div className={styles.container}>
+      <div className={styles.loginBox}>
+        <Login />
+      </div>
+    </div>
   );
 }
 

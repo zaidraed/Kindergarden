@@ -5,14 +5,15 @@ import {
   updateUser,
   disableUser,
 } from "../../features/auth/authSlice";
+import styles from "../../styles/AdminDashboard.module.css";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector((state) => state.auth);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [role, setRole] = useState(""); // Asegúrate de tener un valor por defecto
-  const [isActive, setIsActive] = useState(true); // Valor inicial true o false
+  const [role, setRole] = useState("");
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -24,8 +25,8 @@ const AdminDashboard = () => {
 
   const handleUserSelect = (user) => {
     setSelectedUser(user);
-    setRole(user.Role || ""); // Asegúrate de que siempre tenga un valor, incluso si es una cadena vacía
-    setIsActive(user.active ?? true); // Usa `??` para evitar undefined
+    setRole(user.Role || "");
+    setIsActive(user.active ?? true);
   };
 
   const handleUpdateUser = () => {
@@ -43,17 +44,18 @@ const AdminDashboard = () => {
   );
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Admin Dashboard</h1>
       <input
         type="text"
         placeholder="Buscar usuario..."
         value={searchTerm}
         onChange={handleSearch}
+        className={styles.input}
       />
       {loading && <p>Cargando usuarios...</p>}
       {error && <p>Error: {error}</p>}
-      <table>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Name</th>
@@ -69,7 +71,10 @@ const AdminDashboard = () => {
               <td>{user.Role}</td>
               <td>{user.Active ? "Sí" : "No"}</td>
               <td>
-                <button onClick={() => handleDisableUser(user.email)}>
+                <button
+                  onClick={() => handleDisableUser(user.email)}
+                  className={styles.button}
+                >
                   Desactivar
                 </button>
               </td>
@@ -79,7 +84,7 @@ const AdminDashboard = () => {
       </table>
 
       {selectedUser && (
-        <div>
+        <div className={styles["selected-user"]}>
           <h2>Editar usuario: {selectedUser.name}</h2>
           <div>
             <label>
@@ -99,7 +104,9 @@ const AdminDashboard = () => {
               />
             </label>
           </div>
-          <button onClick={handleUpdateUser}>Guardar cambios</button>
+          <button onClick={handleUpdateUser} className={styles.button}>
+            Guardar cambios
+          </button>
         </div>
       )}
     </div>

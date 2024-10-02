@@ -1,0 +1,52 @@
+.header {
+  width: 100%;
+  background-color: #eb5624;
+  margin: 40px auto;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.nav {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  color: white;
+  font-size: 24px;
+  margin: 0;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.greeting {
+  color: white;
+  margin-left: 20px;
+}
+
+.registerLink {
+  margin-left: 10px;
+}

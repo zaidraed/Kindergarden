@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { TextField, Button, Typography, Box } from "@mui/material";
 import { login, clearAuthError } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import styles from "../../styles/Login.module.css";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Email inválido").required("Requerido"),
@@ -34,55 +34,52 @@ function Login() {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "auto", mt: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Iniciar Sesión
-      </Typography>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Iniciar Sesión</h1>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
         onSubmit={handleLogin}
       >
         {({ errors, touched, isSubmitting }) => (
-          <Form>
-            <Field
-              as={TextField}
-              fullWidth
-              margin="normal"
-              name="email"
-              label="Email"
-              error={touched.email && !!errors.email}
-              helperText={touched.email && errors.email}
-            />
-            <Field
-              as={TextField}
-              fullWidth
-              margin="normal"
-              name="password"
-              label="Contraseña"
-              type="password"
-              error={touched.password && !!errors.password}
-              helperText={touched.password && errors.password}
-            />
-            <Button
+          <Form className={styles.form}>
+            <div className={styles.fieldContainer}>
+              <Field
+                name="email"
+                placeholder="Email"
+                className={`${styles.field} ${
+                  errors.email && touched.email ? styles.errorField : ""
+                }`}
+              />
+              {touched.email && errors.email && (
+                <div className={styles.errorText}>{errors.email}</div>
+              )}
+            </div>
+            <div className={styles.fieldContainer}>
+              <Field
+                name="password"
+                type="password"
+                placeholder="Contraseña"
+                className={`${styles.field} ${
+                  errors.password && touched.password ? styles.errorField : ""
+                }`}
+              />
+              {touched.password && errors.password && (
+                <div className={styles.errorText}>{errors.password}</div>
+              )}
+            </div>
+            <button
               type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
+              className={styles.submitButton}
               disabled={isSubmitting || loading}
-              sx={{ mt: 2 }}
             >
               {loading ? "Cargando..." : "Iniciar Sesión"}
-            </Button>
+            </button>
           </Form>
         )}
       </Formik>
-      {error && (
-        <Typography color="error" sx={{ mt: 2 }}>
-          {error}
-        </Typography>
-      )}
-    </Box>
+      {error && <div className={styles.errorText}>{error}</div>}
+    </div>
   );
 }
 

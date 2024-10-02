@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color: #eb5624;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.loginBox {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 600px) {
+  .loginBox {
+    padding: 20px;
+  }
+}

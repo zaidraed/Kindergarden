@@ -1,0 +1,79 @@
+.container {
+  padding: 20px;
+  background-color: #eb5624;
+  color: white;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid white;
+  background-color: white;
+  color: #eb5624;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  text-align: center;
+  color: #eb5624;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.modal img {
+  max-width: 100%;
+  max-height: 90vh;
+}
+
+.modal-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.modal-text {
+  color: white;
+  margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .card img {
+    height: 100px;
+  }
+}

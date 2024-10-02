@@ -1,17 +1,14 @@
 //import React from "react";
-import { Box, Typography, Container } from "@mui/material";
+import styles from "../../styles/Footer.module.css";
 
 function Footer() {
   return (
-    <Box component="footer" sx={{ bgcolor: "background.paper", py: 6 }}>
-      <Container maxWidth="lg">
-        <Typography variant="body2" color="text.secondary" align="center">
-          {"Copyright © "}
-          Kinder Garden {new Date().getFullYear()}
-          {"."}
-        </Typography>
-      </Container>
-    </Box>
+    <footer className={styles.footer}>
+      <p className={styles.text}>
+        {"Copyright © "} Jardin De la Estacion {new Date().getFullYear()}
+        {"."}
+      </p>
+    </footer>
   );
 }
 
