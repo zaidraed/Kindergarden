@@ -27,8 +27,8 @@ export const register = createAsyncThunk(
 );
 
 // Thunk para obtener usuarios (si es necesario)
-export const fetchUsers = createAsyncThunk("/api/auth/fetchusers", async () => {
-  const response = await api.get("/auth/users");
+export const fetchUsers = createAsyncThunk("/auth/fetchusers", async () => {
+  const response = await api.get("api/auth/users");
 
   return response.data;
 });
@@ -44,7 +44,7 @@ export const updateUser = createAsyncThunk(
 export const disableUser = createAsyncThunk(
   "auth/disableUser",
   async (userEmail) => {
-    await api.patch(`/auth/disable`, { email: userEmail });
+    await api.patch(`/api/auth/disable`, { email: userEmail });
     return userEmail;
   }
 );
