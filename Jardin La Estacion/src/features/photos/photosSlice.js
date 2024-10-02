@@ -5,7 +5,7 @@ export const fetchClassroomPhotos = createAsyncThunk(
   "photos/fetchClassroomPhotos",
   async (classroomId, thunkAPI) => {
     try {
-      const response = await api.get(`/photos/classroom/${classroomId}`);
+      const response = await api.get(`/api/photos/classroom/${classroomId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -18,7 +18,7 @@ export const uploadPhoto = createAsyncThunk(
   async ({ formData, classroomId }, thunkAPI) => {
     try {
       const response = await api.post(
-        `/photos/upload/${classroomId}`, // La ruta debe contener el classroomId
+        `/api/photos/upload/${classroomId}`, // La ruta debe contener el classroomId
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" }, // Indicar multipart/form-data
@@ -36,7 +36,7 @@ export const uploadPhoto = createAsyncThunk(
 export const fetchAllPhotos = createAsyncThunk(
   "photos/fetchAllPhotos",
   async () => {
-    const response = await api.get("/photos/all");
+    const response = await api.get("/api/photos/all");
     return response.data;
   }
 );
