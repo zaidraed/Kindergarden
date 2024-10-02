@@ -5,7 +5,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async (credentials, thunkAPI) => {
     try {
-      const response = await api.post("/auth/login", credentials);
+      const response = await api.post("/api/auth/login", credentials);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message);
@@ -18,7 +18,7 @@ export const register = createAsyncThunk(
   "auth/register",
   async (userData, thunkAPI) => {
     try {
-      const response = await api.post("/auth/register", userData);
+      const response = await api.post("/api/auth/register", userData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message);
@@ -27,7 +27,7 @@ export const register = createAsyncThunk(
 );
 
 // Thunk para obtener usuarios (si es necesario)
-export const fetchUsers = createAsyncThunk("auth/fetchusers", async () => {
+export const fetchUsers = createAsyncThunk("/api/auth/fetchusers", async () => {
   const response = await api.get("/auth/users");
 
   return response.data;
@@ -36,7 +36,7 @@ export const fetchUsers = createAsyncThunk("auth/fetchusers", async () => {
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (userData) => {
-    const response = await api.patch(`/auth/update-role`, userData);
+    const response = await api.patch(`/api/auth/update-role`, userData);
     return response.data;
   }
 );
