@@ -1,3 +1,103 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.photoGallery,
+.videoGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.thumbnailContainer {
+  position: relative;
+  width: 150px;
+  text-align: center;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.description {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.fullscreenViewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.fullscreenImage,
+.fullscreenVideo {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.closeButton,
+.prevButton,
+.nextButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.prevButton {
+  left: 20px;
+}
+
+.nextButton {
+  right: 20px;
+}
+
+.closeButton {
+  top: 20px;
+  right: 20px;
+}
+
+.closeButton:hover,
+.prevButton:hover,
+.nextButton:hover {
+  color: #eb5624;
+}
+
+@media (max-width: 768px) {
+  .thumbnailContainer {
+    width: 100px;
+  }
+  .fullscreenImage,
+  .fullscreenVideo {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
 .container {
   padding: 20px;
   background-color: #eb5624;
@@ -41,18 +141,53 @@
   object-fit: cover;
   border-radius: 4px;
 }
+.card video {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
 
 .modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.75);
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.prevButton,
+.nextButton {
+  position: absolute;
+  top: 50%;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.prevButton {
+  left: 20px;
+}
+
+.nextButton {
+  right: 20px;
 }
 
 .modal img {

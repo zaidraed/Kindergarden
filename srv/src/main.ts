@@ -18,12 +18,11 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
 
   const corsOptions: CorsOptions = {
-    origin: "https://kindergarden-red.vercel.app",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: ["http://localhost:5173"],
     credentials: true,
   };
-
   app.enableCors(corsOptions);
+  credentials: true;
 
   await app.listen(3000);
 }
