@@ -40,3 +40,32 @@
     height: 150px;
   }
 }
+.thumbnailContainer {
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+}
+
+.thumbnail {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05); /* Aumentar tamaño al pasar el mouse */
+}
+
+.description {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #333;
+}
+.sectionDivider {
+  border-top: 2px solid white; /* Línea horizontal con color */
+  margin: 40px 0; /* Espacio antes y después de la línea */
+  width: 100%;
+}

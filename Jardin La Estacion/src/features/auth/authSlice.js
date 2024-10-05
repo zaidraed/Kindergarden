@@ -41,11 +41,17 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const disableUser = createAsyncThunk(
-  "auth/disableUser",
-  async (userEmail) => {
-    await api.patch(`/api/auth/disable`, { email: userEmail });
-    return userEmail;
+export const toggleUseractive = createAsyncThunk(
+  "auth/toggleUseractive",
+  async (userEmail, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`/api/auth/toggle-active`, {
+        email: userEmail,
+      });
+      return response.data; // Puedes devolver el resultado completo o solo el estado actualizado si lo deseas
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -109,6 +115,18 @@ const authSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Error al obtener usuarios";
+      })
+      .addCase(toggleUseractive.fulfilled, (state, action) => {
+        const userEmail = action.payload.email;
+        const user = state.users.find((user) => user.email === userEmail);
+        if (user) {
+          // Toggle the active status
+          user.Active = !user.Active;
+        }
+      })
+      .addCase(toggleUseractive.rejected, (state, action) => {
+        // Manejo de errores, si es necesario
+        state.error = action.payload;
       });
   },
 });

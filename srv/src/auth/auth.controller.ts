@@ -63,11 +63,11 @@ export class AuthController {
   }
 
   @ApiOperation({
-    description: "This enpoint is for update user",
+    description: "This enpoint is for toggling user status",
   })
-  @Patch("disable")
-  //@Auth()
-  async disableUser(@Body("email") email: string) {
-    return this.authService.disableUser(email);
+  @Patch("toggle-active")
+  // @Auth() // Si necesitas autenticación
+  async toggleUserActive(@Body("email") email: string) {
+    return this.authService.toggleUserActive(email);
   }
 }

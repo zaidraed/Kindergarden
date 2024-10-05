@@ -212,3 +212,8 @@
     height: 100px;
   }
 }
+.sectionDivider {
+  border-top: 2px solid white; /* Línea horizontal con color */
+  margin: 40px 0; /* Espacio antes y después de la línea */
+  width: 100%;
+}

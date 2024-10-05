@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassroomPhotos } from "../../features/photos/photosSlice";
-import { fetchClassroomVideos } from "../../features/photos/VideoSlice";
+import { fetchClassroomVideos } from "../../features/photos/videoSlice";
 import styles from "../../styles/ParentDashboard.module.css";
 import PropTypes from "prop-types";
 
@@ -86,7 +86,6 @@ const ParentDashboard = ({ user }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Bienvenido, {user.name}</h1>
-
       <select
         className={styles["form-control"]}
         value={selectedClassroom}
@@ -110,7 +109,7 @@ const ParentDashboard = ({ user }) => {
           </div>
         ))}
       </div>
-
+      <div className={styles.sectionDivider}></div> {/* Línea divisoria */}
       {/* Video Section */}
       <div className={styles.grid}>
         {videos.map((video, index) => (
@@ -128,7 +127,6 @@ const ParentDashboard = ({ user }) => {
           </div>
         ))}
       </div>
-
       {/* Fullscreen Photo Viewer */}
       {fullscreenPhotoIndex !== null && (
         <div
@@ -171,7 +169,6 @@ const ParentDashboard = ({ user }) => {
           </button>
         </div>
       )}
-
       {/* Fullscreen Video Player */}
       {fullscreenVideoIndex !== null && (
         <div

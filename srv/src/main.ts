@@ -18,10 +18,10 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
 
   app.enableCors({
-    origin: 'https://kindergarden-red.vercel.app', // Permite este dominio
-    methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS', // Métodos HTTP permitidos
+    origin: "https://kindergarden-red.vercel.app", // Permite este dominio
+    methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS", // Métodos HTTP permitidos
     credentials: true, // Permitir credenciales (cookies, autenticación)
-    allowedHeaders: 'Content-Type, Authorization', // Cabeceras permitidas
+    allowedHeaders: "Content-Type, Authorization", // Cabeceras permitidas
   });
 
   await app.listen(process.env.PORT || 3000);

@@ -110,13 +110,17 @@ export class AuthService {
     }
   }
 
-  async disableUser(email: string) {
+  async toggleUserActive(email: string) {
+    // Buscar al usuario por email
     const user = await this.findUserByEmail(email);
     if (!user) throw new NotFoundException("User not found");
 
+    // Alternar el valor de Active
+    const newActiveStatus = !user.Active;
+
     return this.prisma.users.update({
       where: { email },
-      data: { Active: false }, // Suponiendo que `active` es el campo para desactivar
+      data: { Active: newActiveStatus },
     });
   }
 }
