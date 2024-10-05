@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPhotos } from "../../features/photos/photosSlice";
-import { fetchAllVideos } from "../../features/video/videoSlice";
+import { fetchAllVideos } from "../../features/videos/videosSlice";
 import PhotoUpload from "../../pages/PhotoUpload";
 import VideoUpload from "../../pages/VideoUpload";
 import styles from "../../styles/TeacherDashboard.module.css";

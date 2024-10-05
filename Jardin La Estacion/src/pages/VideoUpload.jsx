@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadVideo } from "../features/video/videoSlice";
+import { uploadVideo } from "../features/videos/videosSlice";
 import styles from "../styles/VideoUpload.module.css";
 import PropTypes from "prop-types";
 
