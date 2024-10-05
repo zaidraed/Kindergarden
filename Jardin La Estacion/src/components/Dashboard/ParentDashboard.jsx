@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassroomPhotos } from "../../features/photos/photosSlice";
-import { fetchClassroomVideos } from "../../features/video/VideoSlice";
+import { fetchClassroomVideos } from "../../features/video/videoSlice";
 import styles from "../../styles/ParentDashboard.module.css";
 import PropTypes from "prop-types";
 
