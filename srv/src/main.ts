@@ -18,7 +18,7 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
 
   app.enableCors({
-    origin: "https://jardindelaestacion.vercel.app/login", // Permite este dominio
+    origin: "https://jardindelaestacion.vercel.app", // Permite este dominio
     methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS", // Métodos HTTP permitidos
     credentials: true, // Permitir credenciales (cookies, autenticación)
     allowedHeaders: "Content-Type, Authorization", // Cabeceras permitidas
