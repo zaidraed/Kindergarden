@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { login, clearAuthError } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/Login.module.css";
 
 const LoginSchema = Yup.object().shape({
@@ -17,6 +19,8 @@ function Login() {
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     dispatch(clearAuthError());
@@ -58,12 +62,18 @@ function Login() {
             <div className={styles.fieldContainer}>
               <Field
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Contraseña"
                 className={`${styles.field} ${
                   errors.password && touched.password ? styles.errorField : ""
                 }`}
               />
+              <span
+                className={styles.eyeIcon}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </span>
               {touched.password && errors.password && (
                 <div className={styles.errorText}>{errors.password}</div>
               )}

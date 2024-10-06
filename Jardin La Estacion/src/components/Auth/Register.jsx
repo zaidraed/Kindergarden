@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { register } from "../../features/auth/authSlice";
 import styles from "../../styles/Register.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos FontAwesome
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Íconos de ojo
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Requerido"),
@@ -13,6 +16,7 @@ const RegisterSchema = Yup.object().shape({
 function Register() {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -52,14 +56,25 @@ function Register() {
               )}
             </div>
             <div className={styles.fieldContainer}>
-              <Field
-                name="password"
-                type="password"
-                placeholder="Contraseña"
-                className={`${styles.field} ${
-                  errors.password && touched.password ? styles.errorField : ""
-                }`}
-              />
+              <div className={styles.fieldContainerr}>
+                <Field
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Contraseña"
+                  className={`${styles.field} ${
+                    errors.password && touched.password ? styles.errorField : ""
+                  }`}
+                />
+                <span
+                  className={styles.eyeIcon}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </span>
+                {touched.password && errors.password && (
+                  <div className={styles.errorText}>{errors.password}</div>
+                )}
+              </div>
               {touched.password && errors.password && (
                 <div className={styles.errorText}>{errors.password}</div>
               )}

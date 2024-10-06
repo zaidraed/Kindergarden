@@ -6,6 +6,7 @@
   color: white;
   position: relative;
   bottom: 0;
+  box-sizing: border-box;
 }
 
 .text {

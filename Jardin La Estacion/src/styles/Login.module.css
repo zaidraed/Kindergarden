@@ -53,3 +53,20 @@
   color: red;
   margin-top: 5px;
 }
+.fieldContainer {
+  position: relative;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #eb5624; /* Cambia el color según tu diseño */
+}
+
+.field {
+  padding-right: 40px; /* Deja espacio para el ícono */
+  box-sizing: border-box;
+}
