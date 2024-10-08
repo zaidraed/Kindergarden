@@ -17,26 +17,43 @@ enum Role {
 }
 
 model Users {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  password String
-  email    String   @unique
-  Role     Role     @default(PARENT)
-  Active   Boolean  @default(true)
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  password   String
+  email      String      @unique
+  Role       Role        @default(PARENT)
+  Active     Boolean     @default(true)
+   classrooms ClassroomTeacher[]
+}
+
+model Classroom {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String    @unique
+  teachers   ClassroomTeacher[]
+}
+model ClassroomTeacher {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  classroomId String    @db.ObjectId
+
+  user        Users     @relation(fields: [userId], references: [id])
+  classroom   Classroom @relation(fields: [classroomId], references: [id])
+
+  @@unique([userId, classroomId]) // Esto asegura que un profesor no se asocie dos veces a la misma aula
 }
 
 model Photo {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   url         String
-  classroomId String
+  classroomId String @db.ObjectId
   description String
 }
 
 model Video {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   url         String
-  classroomId String
+  classroomId String   @db.ObjectId
   description String
-  publicId    String   // Nuevo campo para almacenar el public_id de Cloudinary
+  publicId    String
   createdAt   DateTime @default(now())
 }

@@ -1,60 +1,58 @@
 .container {
-  width: 100%;
   padding: 20px;
-  background-color: #f4a15d;
-  color: rgb(29, 27, 27);
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #eb5624;
+  color: white;
+}
+
+.title {
   text-align: center;
-  box-sizing: border-box;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.form {
+  margin-bottom: 40px;
 }
 
 .input {
-  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
-  border-radius: 4px;
-  border: 1px solid #b0a4a4;
-}
-
-.table {
   width: 100%;
-  margin: 20px 0;
-  border-collapse: collapse;
+  max-width: 400px;
 }
 
-.table th,
-.table td {
-  padding: 12px;
-  border: 1px solid #fff;
+.select {
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
 }
 
 .button {
+  background-color: white;
+  color: #eb5624;
   padding: 10px 20px;
-  background-color: #eedede;
-  color: #42180b;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
   background-color: #f4a15d;
 }
 
-.selected-user {
-  background-color: white;
-  color: #eb5624;
-  padding: 20px;
+.table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
-  border-radius: 5px;
 }
 
-@media screen and (max-width: 600px) {
-  .container {
-    padding: 10px;
-  }
-
-  .table th,
-  .table td {
-    padding: 8px;
-  }
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid white;
 }

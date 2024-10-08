@@ -28,7 +28,7 @@ export const register = createAsyncThunk(
 
 // Thunk para obtener usuarios (si es necesario)
 export const fetchUsers = createAsyncThunk("/auth/fetchusers", async () => {
-  const response = await api.get("api/auth/users");
+  const response = await api.get("api/auth/users?include=classrooms");
 
   return response.data;
 });
@@ -37,6 +37,15 @@ export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (userData) => {
     const response = await api.patch(`/api/auth/update-role`, userData);
+    return response.data;
+  }
+);
+export const assignTeacherToClassroom = createAsyncThunk(
+  "users/assignTeacherToClassroom",
+  async ({ userId, classroomId }) => {
+    const response = await api.post(`/api/users/${userId}/assign`, {
+      classroomId,
+    });
     return response.data;
   }
 );
@@ -59,6 +68,7 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   loading: false,
+  status: "idle",
   error: null,
   users: [],
 };
@@ -122,6 +132,15 @@ const authSlice = createSlice({
         if (user) {
           // Toggle the active status
           user.Active = !user.Active;
+        }
+      })
+      .addCase(assignTeacherToClassroom.fulfilled, (state, action) => {
+        // Actualizamos el estado del usuario asignado a un aula
+        const index = state.users.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        if (index !== -1) {
+          state.users[index] = action.payload;
         }
       })
       .addCase(toggleUseractive.rejected, (state, action) => {
