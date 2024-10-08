@@ -1,24 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadPhoto } from "../features/photos/photosSlice";
+import { fetchClassrooms } from "../features/classrooms/classroomSlice"; // Importamos la acción para obtener aulas
 import PropTypes from "prop-types";
 import styles from "../styles/PhotoUpload.module.css";
-
-// Lista de aulas de ejemplo
-const classrooms = [
-  { id: "aula1", name: "Aula 1" },
-  { id: "aula2", name: "Aula 2" },
-  { id: "aula3", name: "Aula 3" },
-  { id: "aula4", name: "Aula 4" },
-  { id: "aula5", name: "Aula 5" },
-];
 
 const PhotoUpload = ({ classroomId: initialClassroomId }) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.photos);
+  const { classrooms, status: classroomStatus } = useSelector(
+    (state) => state.classrooms
+  );
+
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
   const [classroomId, setClassroomId] = useState(initialClassroomId || "");
+
+  // Fetch de aulas al montar el componente
+  useEffect(() => {
+    if (classroomStatus === "idle") {
+      dispatch(fetchClassrooms());
+    }
+  }, [dispatch, classroomStatus]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];

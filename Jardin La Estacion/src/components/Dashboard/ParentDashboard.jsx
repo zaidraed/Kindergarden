@@ -2,18 +2,33 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassroomPhotos } from "../../features/photos/photosSlice";
 import { fetchClassroomVideos } from "../../features/videos/videosSlice";
+import { fetchClassrooms } from "../../features/classrooms/classroomSlice"; // Importamos la acción para obtener aulas
 import styles from "../../styles/ParentDashboard.module.css";
 import PropTypes from "prop-types";
 
 const ParentDashboard = ({ user }) => {
   const dispatch = useDispatch();
+
+  // Obtener fotos, videos, y aulas desde Redux
   const { photos } = useSelector((state) => state.photos);
   const { videos } = useSelector((state) => state.videos);
+  const { classrooms, status: classroomStatus } = useSelector(
+    (state) => state.classrooms
+  );
+
   const [selectedClassroom, setSelectedClassroom] = useState("");
   const [fullscreenPhotoIndex, setFullscreenPhotoIndex] = useState(null);
   const [fullscreenVideoIndex, setFullscreenVideoIndex] = useState(null);
   const [touchStartX, setTouchStartX] = useState(null);
 
+  // Fetch de las aulas al montar el componente
+  useEffect(() => {
+    if (classroomStatus === "idle") {
+      dispatch(fetchClassrooms());
+    }
+  }, [dispatch, classroomStatus]);
+
+  // Fetch de las fotos y videos al seleccionar aula
   useEffect(() => {
     if (selectedClassroom) {
       dispatch(fetchClassroomPhotos(selectedClassroom));
@@ -68,18 +83,18 @@ const ParentDashboard = ({ user }) => {
   const handleTouchEndPhoto = (e) => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX - touchEndX > 50) {
-      handleNextPhoto(); // Swipe left (next)
+      handleNextPhoto();
     } else if (touchEndX - touchStartX > 50) {
-      handlePrevPhoto(); // Swipe right (previous)
+      handlePrevPhoto();
     }
   };
 
   const handleTouchEndVideo = (e) => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX - touchEndX > 50) {
-      handleNextVideo(); // Swipe left (next)
+      handleNextVideo();
     } else if (touchEndX - touchStartX > 50) {
-      handlePrevVideo(); // Swipe right (previous)
+      handlePrevVideo();
     }
   };
 
@@ -92,9 +107,11 @@ const ParentDashboard = ({ user }) => {
         onChange={handleClassroomChange}
       >
         <option value="">Selecciona un aula</option>
-        <option value="aula1">Aula 1</option>
-        <option value="aula2">Aula 2</option>
-        <option value="aula3">Aula 3</option>
+        {classrooms.map((classroom) => (
+          <option key={classroom.id} value={classroom.id}>
+            {classroom.name}
+          </option>
+        ))}
       </select>
       {/* Photo Section */}
       <div className={styles.grid}>
@@ -138,7 +155,7 @@ const ParentDashboard = ({ user }) => {
           <button
             className={styles.prevButton}
             onClick={(e) => {
-              e.stopPropagation(); // Evita que se cierre al hacer click en la flecha
+              e.stopPropagation();
               handlePrevPhoto();
             }}
           >
@@ -152,7 +169,7 @@ const ParentDashboard = ({ user }) => {
           <button
             className={styles.nextButton}
             onClick={(e) => {
-              e.stopPropagation(); // Evita que se cierre al hacer click en la flecha
+              e.stopPropagation();
               handleNextPhoto();
             }}
           >
@@ -161,7 +178,7 @@ const ParentDashboard = ({ user }) => {
           <button
             className={styles.closeButton}
             onClick={(e) => {
-              e.stopPropagation(); // Evita que se cierre al hacer click en otras áreas
+              e.stopPropagation();
               closeFullscreenPhoto();
             }}
           >
