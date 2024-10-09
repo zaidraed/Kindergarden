@@ -43,6 +43,14 @@ const TeacherDashboard = ({ user }) => {
     setSelectedClassroom(event.target.value);
   };
 
+  // Ordenar fotos y videos por el campo 'createdAt', de más reciente a más antiguo
+  const sortedPhotos = [...photos].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const sortedVideos = [...videos].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Bienvenido, {user.name || "Profesor"}</h1>
@@ -64,8 +72,9 @@ const TeacherDashboard = ({ user }) => {
         ))}
       </select>
       <h2>Todas las Fotos y Videos</h2>
+      {/* Fotos ordenadas */}
       <div className={styles.grid}>
-        {photos.map((media) => (
+        {sortedPhotos.map((media) => (
           <div key={media.id} className={styles.card}>
             {media.url.includes(".mp4") ? (
               <video controls>
@@ -81,8 +90,9 @@ const TeacherDashboard = ({ user }) => {
         ))}
       </div>
       <div className={styles.sectionDivider}></div> {/* Línea divisoria */}
+      {/* Videos ordenados */}
       <div className={styles.grid}>
-        {videos.map((video) => (
+        {sortedVideos.map((video) => (
           <div key={video.id} className={styles.card}>
             <video
               src={video.url}

@@ -22,6 +22,7 @@ export class VideosService {
         classroomId: data.classroomId,
         description: data.description,
         publicId: data.publicId,
+        createdAt: new Date(),
       },
     });
   }
@@ -29,11 +30,14 @@ export class VideosService {
   async getVideosByClassroom(classroomId: string) {
     return this.prisma.video.findMany({
       where: { classroomId },
+      orderBy: { createdAt: "desc" },
     });
   }
 
   async getAllVideos(): Promise<Video[]> {
-    return this.prisma.video.findMany();
+    return this.prisma.video.findMany({
+      orderBy: { createdAt: "desc" },
+    });
   }
 
   async deleteVideo(id: string): Promise<void> {

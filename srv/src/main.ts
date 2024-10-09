@@ -17,13 +17,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
 
-  app.enableCors({
-    origin: "https://jardindelaestacion.vercel.app", // Permite este dominio
-    methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS", // Métodos HTTP permitidos
-    credentials: true, // Permitir credenciales (cookies, autenticación)
-    allowedHeaders: "Content-Type, Authorization", // Cabeceras permitidas
-  });
+  const corsOptions: CorsOptions = {
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  };
+  app.enableCors(corsOptions);
+  credentials: true;
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(3000);
 }
 bootstrap();
