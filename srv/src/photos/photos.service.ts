@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { PrismaService } from "../prisma/prisma.service";
-import { UploadApiResponse } from "cloudinary";
+
 import { Photo } from "@prisma/client";
 
 @Injectable()
@@ -20,6 +20,7 @@ export class PhotosService {
         url: data.url,
         classroomId: data.classroomId,
         description: data.description,
+        createdAt: new Date(),
       },
     });
   }
@@ -47,9 +48,12 @@ export class PhotosService {
   async getPhotosByClassroom(classroomId: string) {
     return this.prisma.photo.findMany({
       where: { classroomId },
+      orderBy: { createdAt: "desc" },
     });
   }
   async getAllPhotos(): Promise<Photo[]> {
-    return this.prisma.photo.findMany();
+    return this.prisma.photo.findMany({
+      orderBy: { createdAt: "desc" },
+    });
   }
 }

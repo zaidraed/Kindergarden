@@ -98,6 +98,13 @@ const ParentDashboard = ({ user }) => {
     }
   };
 
+  const sortedPhotos = [...photos].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const sortedVideos = [...videos].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Bienvenido, {user.name}</h1>
@@ -115,7 +122,7 @@ const ParentDashboard = ({ user }) => {
       </select>
       {/* Photo Section */}
       <div className={styles.grid}>
-        {photos.map((photo, index) => (
+        {sortedPhotos.map((photo, index) => (
           <div key={photo.id} className={styles.card}>
             <img
               src={photo.url}
@@ -129,7 +136,7 @@ const ParentDashboard = ({ user }) => {
       <div className={styles.sectionDivider}></div> {/* Línea divisoria */}
       {/* Video Section */}
       <div className={styles.grid}>
-        {videos.map((video, index) => (
+        {sortedVideos.map((video, index) => (
           <div key={video.id} className={styles.card}>
             <video
               src={video.url}

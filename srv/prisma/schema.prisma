@@ -47,6 +47,7 @@ model Photo {
   url         String
   classroomId String @db.ObjectId
   description String
+  createdAt   DateTime @default(now())
 }
 
 model Video {
