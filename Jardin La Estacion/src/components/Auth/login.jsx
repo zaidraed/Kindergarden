@@ -18,7 +18,8 @@ const LoginSchema = Yup.object().shape({
 });
 
 // Configure this based on your backend URL
-const GOOGLE_LOGIN_URL = "/api/auth/google/login";
+const GOOGLE_LOGIN_URL =
+  "https://kindergarden-production.up.railway.app/api/auth/google/login";
 
 function Login() {
   const dispatch = useDispatch();
