@@ -16,7 +16,7 @@ export class MailService {
   }
 
   async sendPasswordResetEmail(email: string, token: string) {
-    const url = `https://jardindelaestacion.vercel.app/reset-password/=${token}`;
+    const url = `https://jardindelaestacion.vercel.app/reset-password?token=${token}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
