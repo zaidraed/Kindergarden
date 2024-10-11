@@ -101,8 +101,12 @@ export class AuthController {
   })
   @Get("google/redirect")
   @UseGuards(AuthGuard("google"))
-  async googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req);
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const loginResult = await this.authService.googleLogin(req);
+    const token = loginResult.access_token;
+
+    // Redirect to frontend with token
+    res.redirect(`${process.env.FRONTEND_URL}/auth?token=${token}`);
   }
 
   @Post("forgot-password")
@@ -121,6 +125,10 @@ export class AuthController {
         "Error processing forgot password request"
       );
     }
+  }
+  @Post("validate-token")
+  async validateToken(@Body("token") token: string) {
+    return this.authService.validateToken(token);
   }
 
   // Restablecer contraseña con token

@@ -5,12 +5,11 @@ import * as Yup from "yup";
 import {
   login,
   clearAuthError,
-  googleLogin,
+  validateGoogleToken,
 } from "../../features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { GoogleLogin } from "@react-oauth/google"; // Importamos GoogleLogin
 import styles from "../../styles/Login.module.css";
 
 const LoginSchema = Yup.object().shape({
@@ -18,9 +17,13 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Requerido"),
 });
 
+// Configure this based on your backend URL
+const GOOGLE_LOGIN_URL = "/api/auth/google/login";
+
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
@@ -37,18 +40,21 @@ function Login() {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const token = urlParams.get("token");
+    if (token) {
+      dispatch(validateGoogleToken(token));
+    }
+  }, [location, dispatch]);
+
   const handleLogin = (values, { setSubmitting }) => {
     dispatch(login(values));
     setSubmitting(false);
   };
 
-  const handleGoogleLoginSuccess = (response) => {
-    const token = response.credential;
-    dispatch(googleLogin(token));
-  };
-
-  const handleGoogleLoginError = () => {
-    console.error("Error en el inicio de sesión con Google");
+  const handleGoogleLogin = () => {
+    window.location.href = GOOGLE_LOGIN_URL;
   };
 
   return (
@@ -102,10 +108,9 @@ function Login() {
           </Form>
         )}
       </Formik>
-      <GoogleLogin
-        onSuccess={handleGoogleLoginSuccess}
-        onError={handleGoogleLoginError}
-      />
+      <button onClick={handleGoogleLogin} className={styles.googleButton}>
+        Iniciar sesión con Google
+      </button>
       {error && <div className={styles.errorText}>{error}</div>}
       <p>
         ¿Olvidaste tu contraseña?{" "}

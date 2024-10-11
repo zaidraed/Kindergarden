@@ -23,6 +23,9 @@ import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class AuthService {
+  validateToken(token: string) {
+    throw new Error("Method not implemented.");
+  }
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService
