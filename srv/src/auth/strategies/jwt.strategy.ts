@@ -1,21 +1,19 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-
-import { ExtractJwt, Strategy } from "passport-jwt";
-
-import { type User, type IJwtPayload } from "../interfaces";
+import { Strategy, ExtractJwt } from "passport-jwt"; // Este es el correcto para JWT
+import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "../../prisma/prisma.service";
+import { type User, type IJwtPayload } from "../interfaces";
 import { Request } from "express";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly prismaService: PrismaService,
-    configService: ConfigService
+    private readonly configService: ConfigService
   ) {
     super({
-      secretOrKey: configService.get("SECRET_JWT_KEY"),
+      secretOrKey: configService.get("SECRET_JWT_KEY"), // Obtén la clave secreta del archivo .env
       jwtFromRequest: ExtractJwt.fromExtractors([
         JwtStrategy.extractJWTFromCookies,
       ]),
@@ -24,8 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   private static extractJWTFromCookies(req: Request): string | null {
     if (req.cookies && req.cookies.access_token) {
-      console.log(req.cookies);
-
       return req.cookies.access_token;
     }
     return null;
@@ -34,12 +30,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate({ id }: IJwtPayload): Promise<User> {
     const user = await this.prismaService.users.findUnique({ where: { id } });
 
-    if (!user) throw new UnauthorizedException("Token not valid");
-    // if (!user.is_active) throw new UnauthorizedException('User is inactive')
-    // if (!user.is_verified) throw new UnauthorizedException('Unveried user')
+    if (!user) throw new UnauthorizedException("Token no válido");
     delete user.password;
-    const { id: idUser, ...rest } = user;
 
-    return { ...rest, id: idUser };
+    return user;
   }
 }

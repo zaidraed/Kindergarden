@@ -63,6 +63,38 @@ export const toggleUseractive = createAsyncThunk(
     }
   }
 );
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/api/auth/forgot-password", { email });
+      return response.data;
+    } catch (error) {
+      // Log the error for debugging
+      console.error("Error in forgotPassword thunk:", error);
+
+      // Return a more informative error message
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while processing your request"
+      );
+    }
+  }
+);
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ token, newPassword }, thunkAPI) => {
+    try {
+      const response = await api.post("/api/auth/reset-password", {
+        token,
+        newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
 
 const initialState = {
   user: null,
@@ -145,6 +177,28 @@ const authSlice = createSlice({
       })
       .addCase(toggleUseractive.rejected, (state, action) => {
         // Manejo de errores, si es necesario
+        state.error = action.payload;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgotPassword.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },

@@ -21,6 +21,7 @@ model Users {
   name       String
   password   String
   email      String      @unique
+  resetPasswordToken  String?
   Role       Role        @default(PARENT)
   Active     Boolean     @default(true)
    classrooms ClassroomTeacher[]

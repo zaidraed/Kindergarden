@@ -13,14 +13,20 @@ import { sign } from "jsonwebtoken";
 import { UpdateRoleAuthDto } from "./dto/role-auth.dto";
 import { UpdateAuthDto } from "./dto/update-auth.dto";
 import { User } from "./interfaces";
+import { JwtService } from "@nestjs/jwt";
 import {
   comparePasswordHashing,
   hashingPassword,
 } from "src/common/hashing-password";
+import * as bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService
+  ) {}
   async create(createAuthDto: CreateAuthDto) {
     // const password = await hash(createAuthDto.password, parseInt(process.env.SALT_ROUNDS))
     // createAuthDto.password = password
@@ -122,5 +128,84 @@ export class AuthService {
       where: { email },
       data: { Active: newActiveStatus },
     });
+  }
+  async validateOAuthLogin(user) {
+    let userInDb = await this.prisma.users.findUnique({
+      where: { email: user.email },
+    });
+
+    if (!userInDb) {
+      // Crear el usuario si no existe
+      userInDb = await this.prisma.users.create({
+        data: {
+          email: user.email,
+          name: user.firstName,
+          password: user.password,
+        },
+      });
+    }
+
+    // Generar y devolver JWT
+    const payload = { email: user.email, sub: userInDb.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  async googleLogin(req) {
+    if (!req.user) {
+      return "No user from Google";
+    }
+    return {
+      message: "User info from Google",
+      user: req.user,
+    };
+  }
+  async generateResetToken(email: string): Promise<string> {
+    const user = await this.prisma.users.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new BadRequestException("Usuario no encontrado");
+    }
+
+    const resetToken = uuidv4(); // Genera un token único
+    await this.prisma.users.update({
+      where: { email },
+      data: { resetPasswordToken: resetToken }, // Guarda el token en el campo correspondiente
+    });
+
+    return resetToken;
+  }
+
+  async resetPassword(resetPasswordDto: {
+    token: string;
+    newPassword: string;
+  }) {
+    const { token, newPassword } = resetPasswordDto;
+
+    // Buscar al usuario por el token
+    const user = await this.prisma.users.findFirst({
+      where: { resetPasswordToken: token },
+    });
+
+    if (!user) {
+      throw new BadRequestException("Token inválido o expirado");
+    }
+
+    // Hashear la nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Actualizar la contraseña del usuario y limpiar el token
+    await this.prisma.users.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null, // Limpiar el token después de usarlo
+      },
+    });
+
+    return { message: "Contraseña restablecida con éxito" };
   }
 }

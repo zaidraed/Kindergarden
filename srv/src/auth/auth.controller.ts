@@ -1,4 +1,15 @@
-import { Controller, Post, Body, Res, Patch, Get } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Patch,
+  Get,
+  UseGuards,
+  Req,
+  NotFoundException,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateAuthDto } from "./dto/create-auth.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -8,11 +19,16 @@ import { Auth, GetUser } from "./decorator";
 import { UpdateRoleAuthDto } from "./dto/role-auth.dto";
 import { UpdateAuthDto } from "./dto/update-auth.dto";
 import { User } from "./interfaces";
+import { AuthGuard } from "@nestjs/passport";
+import { MailService } from "../mail/mail.service";
 
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailService: MailService
+  ) {}
 
   @ApiOperation({
     description: "This endpoint is for create new users",
@@ -69,5 +85,41 @@ export class AuthController {
   // @Auth() // Si necesitas autenticación
   async toggleUserActive(@Body("email") email: string) {
     return this.authService.toggleUserActive(email);
+  }
+  // Redireccionar a Google para login
+  @Get("google")
+  @UseGuards(AuthGuard("google"))
+  async googleAuth(@Req() req) {}
+
+  // Callback después de Google login
+  @Get("google/callback")
+  @UseGuards(AuthGuard("google"))
+  async googleAuthRedirect(@Req() req) {
+    return this.authService.googleLogin(req);
+  }
+  @Post("forgot-password")
+  async forgotPassword(@Body("email") email: string) {
+    try {
+      const token = await this.authService.generateResetToken(email);
+      await this.mailService.sendPasswordResetEmail(email, token);
+      return { message: "Correo enviado para recuperación de contraseña" };
+    } catch (error) {
+      if (error.message === "No user found with this email") {
+        throw new NotFoundException(error.message);
+      }
+      // Log the error for debugging
+      console.error("Error in forgotPassword:", error);
+      throw new InternalServerErrorException(
+        "Error processing forgot password request"
+      );
+    }
+  }
+
+  // Restablecer contraseña con token
+  @Post("reset-password")
+  async resetPassword(
+    @Body() resetPasswordDto: { token: string; newPassword: string }
+  ) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }
