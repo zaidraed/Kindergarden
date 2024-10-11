@@ -5,7 +5,7 @@ export const googleLogin = createAsyncThunk(
   "auth/googleLogin",
   async (token, thunkAPI) => {
     try {
-      const response = await api.post("/api/auth/google-login", { token });
+      const response = await api.post("/api/auth/google/login", { token });
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message);
