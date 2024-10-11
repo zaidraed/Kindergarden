@@ -86,17 +86,25 @@ export class AuthController {
   async toggleUserActive(@Body("email") email: string) {
     return this.authService.toggleUserActive(email);
   }
-  // Redireccionar a Google para login
-  @Get("google")
-  @UseGuards(AuthGuard("google"))
-  async googleAuth(@Req() req) {}
 
-  // Callback después de Google login
-  @Get("google/callback")
+  @ApiOperation({
+    description: "This endpoint is for logging in with Google",
+  })
+  @Get("google/login")
+  @UseGuards(AuthGuard("google"))
+  async googleLogin() {
+    // This will trigger the Google OAuth2 login
+  }
+
+  @ApiOperation({
+    description: "This endpoint is for handling the Google callback",
+  })
+  @Get("google/redirect")
   @UseGuards(AuthGuard("google"))
   async googleAuthRedirect(@Req() req) {
     return this.authService.googleLogin(req);
   }
+
   @Post("forgot-password")
   async forgotPassword(@Body("email") email: string) {
     try {

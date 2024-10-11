@@ -129,38 +129,34 @@ export class AuthService {
       data: { Active: newActiveStatus },
     });
   }
-  async validateOAuthLogin(user) {
-    let userInDb = await this.prisma.users.findUnique({
-      where: { email: user.email },
-    });
+  async googleLogin(req) {
+    if (!req.user) {
+      throw new BadRequestException("Google login failed");
+    }
 
-    if (!userInDb) {
-      // Crear el usuario si no existe
-      userInDb = await this.prisma.users.create({
+    const { email, firstName, lastName } = req.user;
+    let user = await this.prisma.users.findUnique({ where: { email } });
+
+    if (!user) {
+      user = await this.prisma.users.create({
         data: {
-          email: user.email,
-          name: user.firstName,
-          password: user.password,
+          email,
+          name: `${firstName} ${lastName}`,
+          password: null, // Google users will not have a password
         },
       });
     }
 
-    // Generar y devolver JWT
-    const payload = { email: user.email, sub: userInDb.id };
+    return this.generateJwtToken(user);
+  }
+
+  private generateJwtToken(user) {
+    const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async googleLogin(req) {
-    if (!req.user) {
-      return "No user from Google";
-    }
-    return {
-      message: "User info from Google",
-      user: req.user,
-    };
-  }
   async generateResetToken(email: string): Promise<string> {
     const user = await this.prisma.users.findUnique({
       where: { email },

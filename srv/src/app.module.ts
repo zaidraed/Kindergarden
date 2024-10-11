@@ -9,9 +9,13 @@ import { VideosModule } from "./videos/videos.module";
 import { ClassroomModule } from "./classroom/classroom.module";
 import { MailModule } from "./mail/mail.module";
 import { GoogleStrategy } from "./auth/strategies/google.strategy";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     PrismaModule,
     AuthModule,
     PhotosModule,
