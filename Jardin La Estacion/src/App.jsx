@@ -10,6 +10,7 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ResetPassword from "./components/Auth/resetPassword";
 import GoogleAuthCallback from "./features/auth/GoogleAuthCallback";
+
 function App() {
   return (
     <ErrorBoundary>
