@@ -5,9 +5,9 @@ import * as Yup from "yup";
 import {
   login,
   clearAuthError,
-  validateGoogleToken,
+  // validateGoogleToken,
 } from "../../features/auth/authSlice";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/Login.module.css";
@@ -24,7 +24,7 @@ const GOOGLE_LOGIN_URL =
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  //const location = useLocation();
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
@@ -41,13 +41,13 @@ function Login() {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const token = urlParams.get("token");
-    if (token) {
-      dispatch(validateGoogleToken(token));
-    }
-  }, [location, dispatch]);
+  //useEffect(() => {
+  //const urlParams = new URLSearchParams(location.search);
+  //const token = urlParams.get("token");
+  //if (token) {
+  // dispatch(validateGoogleToken(token));
+  //}
+  //}, [location, dispatch]);
 
   const handleLogin = (values, { setSubmitting }) => {
     dispatch(login(values));
