@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {
   login,
   clearAuthError,
-  validateGoogleToken,
+  loginSuccess,
 } from "../../features/auth/authSlice";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,12 +42,13 @@ function Login() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const token = urlParams.get("token");
+    const searchParams = new URLSearchParams(location.search);
+    const token = searchParams.get("token");
     if (token) {
-      dispatch(validateGoogleToken(token));
+      dispatch(loginSuccess(token)); // Action to update your auth state
+      navigate("/dashboard");
     }
-  }, [location, dispatch]);
+  }, [dispatch, navigate, location]);
 
   const handleLogin = (values, { setSubmitting }) => {
     dispatch(login(values));

@@ -29,6 +29,19 @@ export const register = createAsyncThunk(
   }
 );
 
+export const validateGoogleToken = createAsyncThunk(
+  "auth/validateGoogleToken",
+  async (token, thunkAPI) => {
+    try {
+      const response = await api.post("/api/auth/validate-google-token", {
+        token,
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
 // Thunk para obtener usuarios (si es necesario)
 export const fetchUsers = createAsyncThunk("/auth/fetchusers", async () => {
   const response = await api.get("api/auth/users?include=classrooms");
@@ -202,6 +215,19 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(validateGoogleToken.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(validateGoogleToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+      })
+      .addCase(validateGoogleToken.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
