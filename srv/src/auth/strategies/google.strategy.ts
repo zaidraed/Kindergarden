@@ -9,8 +9,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     super({
       clientID: configService.get<string>("GOOGLE_CLIENT_ID"),
       clientSecret: configService.get<string>("GOOGLE_CLIENT_SECRET"),
-      callbackURL: configService.get<string>("GOOGLE_CALLBACK_URL"),
+      callbackURL:
+        "https://kindergarden-production.up.railway.app/api/auth/google/redirect",
       scope: ["email", "profile"],
+      prompt: "select_account",
+      accessType: "offline",
+      proxy: true,
     });
   }
 

@@ -13,18 +13,16 @@ import { GoogleStrategy } from "./strategies/google.strategy";
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   imports: [
-    ConfigModule,
-    PassportModule.register({ defaultStrategy: "jwt" }),
+    PassportModule.register({ defaultStrategy: "google" }),
     JwtModule.registerAsync({
-      imports: [ConfigModule, MailModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get("SECRET_JWT_KEY"),
-        signOptions: {
-          expiresIn: configService.get("JWT_REFRESH_EXPIRATION"),
-        },
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>("JWT_SECRET"),
+        signOptions: { expiresIn: "1h" },
       }),
+      inject: [ConfigService],
     }),
+    ConfigModule,
     PrismaModule,
     MailModule,
   ],

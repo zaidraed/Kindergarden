@@ -9,6 +9,7 @@ import {
   Req,
   NotFoundException,
   InternalServerErrorException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateAuthDto } from "./dto/create-auth.dto";
@@ -103,15 +104,28 @@ export class AuthController {
   })
   @Get("google/redirect")
   @UseGuards(AuthGuard("google"))
-  async googleAuthRedirect(@Req() req, @Res() res) {
+  async googleAuthRedirect(@Req() req, @Res() res: Response) {
     try {
       const loginResult = await this.authService.googleLogin(req);
       const token = loginResult.access_token;
 
+      // Log the token for debugging (remove in production)
+      console.log("Generated token:", token);
+
       // Redirect to the frontend with the token
-      res.redirect(`https://jardindelaestacion.vercel.app/auth?token=${token}`);
+      const frontendUrl = this.configService.get<string>("FRONTEND_URL");
+      const redirectUrl = `${frontendUrl}/auth?token=${token}`;
+
+      console.log("Redirecting to:", redirectUrl);
+
+      return res.redirect(redirectUrl);
     } catch (error) {
       console.error("Error in Google authentication:", error);
+      if (error instanceof UnauthorizedException) {
+        return res.redirect(
+          `${this.configService.get<string>("FRONTEND_URL")}/login?error=unauthorized`
+        );
+      }
       throw new InternalServerErrorException(
         "Error processing Google authentication"
       );

@@ -2,7 +2,9 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { CreateAuthDto } from "./dto/create-auth.dto";
 import { PrismaService } from "../prisma/prisma.service";
@@ -21,11 +23,21 @@ import {
 import * as bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 
+interface GoogleUser {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+interface TokenResponse {
+  access_token: string;
+}
+
 @Injectable()
 export class AuthService {
   validateToken(token: string) {
     throw new Error("Method not implemented.");
   }
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService
@@ -132,31 +144,28 @@ export class AuthService {
       data: { Active: newActiveStatus },
     });
   }
-  async googleLogin(req) {
+  async googleLogin(req: {
+    user: GoogleUser | undefined;
+  }): Promise<TokenResponse> {
+    this.logger.log("Google login attempt");
     if (!req.user) {
-      throw new BadRequestException("Google login failed");
+      this.logger.error("No user from Google");
+      throw new UnauthorizedException("No user from Google");
     }
 
-    const { email, firstName, lastName } = req.user;
-    let user = await this.prisma.users.findUnique({ where: { email } });
+    this.logger.log("User from Google", req.user);
 
-    if (!user) {
-      user = await this.prisma.users.create({
-        data: {
-          email,
-          name: `${firstName} ${lastName}`,
-          password: null, // Google users will not have a password
-        },
-      });
-    }
+    // Generate JWT
+    const payload = {
+      email: req.user.email,
+      sub: req.user.firstName + " " + req.user.lastName,
+    };
+    const token = this.jwtService.sign(payload);
 
-    return this.generateJwtToken(user);
-  }
+    this.logger.log("JWT generated");
 
-  private generateJwtToken(user) {
-    const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: token,
     };
   }
 
