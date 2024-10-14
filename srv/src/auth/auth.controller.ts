@@ -21,13 +21,15 @@ import { UpdateAuthDto } from "./dto/update-auth.dto";
 import { User } from "./interfaces";
 import { AuthGuard } from "@nestjs/passport";
 import { MailService } from "../mail/mail.service";
+import { ConfigService } from "@nestjs/config";
 
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
+    private readonly configService: ConfigService
   ) {}
 
   @ApiOperation({
@@ -93,7 +95,7 @@ export class AuthController {
   @Get("google/login")
   @UseGuards(AuthGuard("google"))
   async googleLogin() {
-    // This will trigger the Google OAuth2 login
+    // This method stays empty as it will be handled by Passport
   }
 
   @ApiOperation({
@@ -102,11 +104,18 @@ export class AuthController {
   @Get("google/redirect")
   @UseGuards(AuthGuard("google"))
   async googleAuthRedirect(@Req() req, @Res() res) {
-    const loginResult = await this.authService.googleLogin(req);
-    const token = loginResult.access_token;
+    try {
+      const loginResult = await this.authService.googleLogin(req);
+      const token = loginResult.access_token;
 
-    // Redirect to frontend with token
-    res.redirect(`${process.env.FRONTEND_URL}/auth?token=${token}`);
+      // Redirect to the frontend with the token
+      res.redirect(`https://jardindelaestacion.vercel.app/auth?token=${token}`);
+    } catch (error) {
+      console.error("Error in Google authentication:", error);
+      throw new InternalServerErrorException(
+        "Error processing Google authentication"
+      );
+    }
   }
 
   @Post("forgot-password")
