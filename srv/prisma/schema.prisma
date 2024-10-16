@@ -19,12 +19,13 @@ enum Role {
 model Users {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  password   String
+  password   String?
   email      String      @unique
   resetPasswordToken  String?
   Role       Role        @default(PARENT)
   Active     Boolean     @default(true)
    classrooms ClassroomTeacher[]
+    googleAuthToken      String?
 }
 
 model Classroom {
