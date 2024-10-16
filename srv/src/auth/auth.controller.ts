@@ -93,7 +93,7 @@ export class AuthController {
   @ApiOperation({
     description: "This endpoint is for logging in with Google",
   })
-  @Get("google")
+  @Get("google/login")
   @UseGuards(AuthGuard("google"))
   async googleLogin() {
     // This method stays empty as it will be handled by Passport
