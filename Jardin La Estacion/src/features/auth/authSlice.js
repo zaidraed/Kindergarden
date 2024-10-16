@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
-export const initiateGoogleLogin = () => {
-  window.location.href = "/api/auth/google/login";
-};
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials, thunkAPI) => {
@@ -29,25 +26,24 @@ export const register = createAsyncThunk(
   }
 );
 
-export const validateGoogleToken = createAsyncThunk(
-  "auth/validateGoogleToken",
-  async (token, thunkAPI) => {
-    try {
-      const response = await api.post("/api/auth/validate-google-token", {
-        token,
-      });
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message);
-    }
-  }
-);
 // Thunk para obtener usuarios (si es necesario)
 export const fetchUsers = createAsyncThunk("/auth/fetchusers", async () => {
   const response = await api.get("api/auth/users?include=classrooms");
 
   return response.data;
 });
+
+export const googleLogin = createAsyncThunk(
+  "auth/googleLogin",
+  async (token, thunkAPI) => {
+    try {
+      const response = await api.post("/api/auth/google-login", { token });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
 
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
@@ -149,7 +145,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -218,16 +213,21 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(validateGoogleToken.pending, (state) => {
+      .addCase(googleLogin.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(validateGoogleToken.fulfilled, (state, action) => {
+      .addCase(googleLogin.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
-        state.user = action.payload;
+        state.user = {
+          ...action.payload.user,
+          role: action.payload.user.Role, // Asegúrate de que el rol está siendo asignado correctamente aquí
+        };
+        state.token = action.payload.access_token;
       })
-      .addCase(validateGoogleToken.rejected, (state, action) => {
+
+      .addCase(googleLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -9,7 +9,8 @@ import {
   Req,
   NotFoundException,
   InternalServerErrorException,
-  UnauthorizedException,
+  Options,
+  All,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateAuthDto } from "./dto/create-auth.dto";
@@ -22,15 +23,13 @@ import { UpdateAuthDto } from "./dto/update-auth.dto";
 import { User } from "./interfaces";
 import { AuthGuard } from "@nestjs/passport";
 import { MailService } from "../mail/mail.service";
-import { ConfigService } from "@nestjs/config";
 
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly mailService: MailService,
-    private readonly configService: ConfigService
+    private readonly mailService: MailService
   ) {}
 
   @ApiOperation({
@@ -89,49 +88,33 @@ export class AuthController {
   async toggleUserActive(@Body("email") email: string) {
     return this.authService.toggleUserActive(email);
   }
+  // Redireccionar a Google para login
 
-  @ApiOperation({
-    description: "This endpoint is for logging in with Google",
-  })
-  @Get("google/login")
-  @UseGuards(AuthGuard("google"))
-  async googleLogin() {
-    // This method stays empty as it will be handled by Passport
+  @Post("google-login")
+  async googleLogin(@Body("token") token: string) {
+    const { user, access_token } = await this.authService.googleLogin(token);
+    return {
+      message: "Login con Google exitoso",
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        Role: user.Role, // Asegúrate de incluir el rol aquí también
+      },
+      access_token,
+    };
   }
 
-  @ApiOperation({
-    description: "This endpoint is for handling the Google callback",
-  })
-  @Get("google/redirect")
+  @Get("google")
   @UseGuards(AuthGuard("google"))
-  async googleAuthRedirect(@Req() req, @Res() res: Response) {
-    try {
-      const loginResult = await this.authService.googleLogin(req);
-      const token = loginResult.access_token;
+  async googleAuth(@Req() req) {}
 
-      // Log the token for debugging (remove in production)
-      console.log("Generated token:", token);
-
-      // Redirect to the frontend with the token
-      const frontendUrl = this.configService.get<string>("FRONTEND_URL");
-      const redirectUrl = `${frontendUrl}/auth?token=${token}`;
-
-      console.log("Redirecting to:", redirectUrl);
-
-      return res.redirect(redirectUrl);
-    } catch (error) {
-      console.error("Error in Google authentication:", error);
-      if (error instanceof UnauthorizedException) {
-        return res.redirect(
-          `${this.configService.get<string>("FRONTEND_URL")}/login?error=unauthorized`
-        );
-      }
-      throw new InternalServerErrorException(
-        "Error processing Google authentication"
-      );
-    }
+  // Callback después de Google login
+  @Get("google/callback")
+  @UseGuards(AuthGuard("google"))
+  async googleAuthRedirect(@Req() req) {
+    return this.authService.googleLogin(req);
   }
-
   @Post("forgot-password")
   async forgotPassword(@Body("email") email: string) {
     try {
@@ -149,10 +132,6 @@ export class AuthController {
       );
     }
   }
-  @Post("validate-token")
-  async validateToken(@Body("token") token: string) {
-    return this.authService.validateToken(token);
-  }
 
   // Restablecer contraseña con token
   @Post("reset-password")
@@ -160,5 +139,14 @@ export class AuthController {
     @Body() resetPasswordDto: { token: string; newPassword: string }
   ) {
     return this.authService.resetPassword(resetPasswordDto);
+  }
+  @Options("*")
+  handleOptions() {
+    return "OK";
+  }
+
+  @All("*")
+  handleAll() {
+    return "OK";
   }
 }

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
   login,
   clearAuthError,
-  validateGoogleToken,
+  googleLogin,
 } from "../../features/auth/authSlice";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/Login.module.css";
@@ -17,14 +18,9 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Requerido"),
 });
 
-// Configure this based on your backend URL
-const GOOGLE_LOGIN_URL =
-  "https://kindergarden-production.up.railway.app/api/auth/google/login";
-
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
@@ -41,22 +37,21 @@ function Login() {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get("token");
-    if (token) {
-      dispatch(validateGoogleToken(token)); // Action to update your auth state
-      navigate("/dashboard");
-    }
-  }, [dispatch, navigate, location]);
-
   const handleLogin = (values, { setSubmitting }) => {
     dispatch(login(values));
     setSubmitting(false);
   };
+  const handleGoogleSuccess = async (response) => {
+    try {
+      await dispatch(googleLogin(response.credential)).unwrap();
+      // No need to navigate here, the useEffect above will handle it
+    } catch (error) {
+      console.error("Error during Google login:", error);
+    }
+  };
 
-  const handleGoogleLogin = () => {
-    window.location.href = GOOGLE_LOGIN_URL;
+  const handleGoogleFailure = (error) => {
+    console.error("Google Sign-In Error:", error);
   };
 
   return (
@@ -107,12 +102,23 @@ function Login() {
             >
               {loading ? "Cargando..." : "Iniciar Sesión"}
             </button>
+            <GoogleOAuthProvider clientId="566063083458-51k9fvuupd3kju0klptht1p5ocuppqu7.apps.googleusercontent.com">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onFailure={handleGoogleFailure}
+                render={(renderProps) => (
+                  <button
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  >
+                    Login with Google
+                  </button>
+                )}
+              />
+            </GoogleOAuthProvider>
           </Form>
         )}
       </Formik>
-      <button onClick={handleGoogleLogin} className={styles.googleButton}>
-        Iniciar sesión con Google
-      </button>
       {error && <div className={styles.errorText}>{error}</div>}
       <p>
         ¿Olvidaste tu contraseña?{" "}

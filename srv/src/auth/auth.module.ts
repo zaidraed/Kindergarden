@@ -8,21 +8,36 @@ import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { MailModule } from "../mail/mail.module";
 import { GoogleStrategy } from "./strategies/google.strategy";
+import { PrismaService } from "src/prisma/prisma.service";
+import { OAuth2Client } from "google-auth-library";
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    PrismaService,
+    {
+      provide: OAuth2Client,
+      useValue: new OAuth2Client(
+        "566063083458-51k9fvuupd3kju0klptht1p5ocuppqu7.apps.googleusercontent.com"
+      ),
+    },
+  ],
   imports: [
-    PassportModule.register({ defaultStrategy: "google" }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>("JWT_SECRET"),
-        signOptions: { expiresIn: "1h" },
-      }),
-      inject: [ConfigService],
-    }),
     ConfigModule,
+    PassportModule.register({ defaultStrategy: "jwt" }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule, MailModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get("SECRET_JWT_KEY"),
+        signOptions: {
+          expiresIn: configService.get("JWT_REFRESH_EXPIRATION"),
+        },
+      }),
+    }),
     PrismaModule,
     MailModule,
   ],

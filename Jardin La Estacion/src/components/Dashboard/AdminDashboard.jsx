@@ -152,54 +152,51 @@ const AdminDashboard = () => {
       />
       {loading && <p>Cargando usuarios...</p>}
       {error && <p>Error: {error}</p>}
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Rol</th>
-              <th>Activo</th>
-              <th>Acciones</th>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsers.map((user) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.Role}</td>
+              <td>{user.Active ? "Sí" : "No"}</td>
+              <td>
+                <button
+                  onClick={() => handleDisableUser(user.email)}
+                  className={styles.button}
+                >
+                  {user.Active ? "Desactivar" : "Activar"}
+                </button>
+                <button
+                  onClick={() => handleUpdateUserRole(user, "ADMIN")}
+                  className={styles.button}
+                >
+                  ADMIN
+                </button>
+                <button
+                  onClick={() => handleUpdateUserRole(user, "TEACHER")}
+                  className={styles.button}
+                >
+                  TEACHER
+                </button>
+                <button
+                  onClick={() => handleUpdateUserRole(user, "PARENT")}
+                  className={styles.button}
+                >
+                  PARENT
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.Role}</td>
-                <td>{user.Active ? "Sí" : "No"}</td>
-                <td>
-                  <button
-                    onClick={() => handleDisableUser(user.email)}
-                    className={styles.button}
-                  >
-                    {user.Active ? "Desactivar" : "Activar"}
-                  </button>
-                  <button
-                    onClick={() => handleUpdateUserRole(user, "ADMIN")}
-                    className={styles.button}
-                  >
-                    ADMIN
-                  </button>
-                  <button
-                    onClick={() => handleUpdateUserRole(user, "TEACHER")}
-                    className={styles.button}
-                  >
-                    TEACHER
-                  </button>
-                  <button
-                    onClick={() => handleUpdateUserRole(user, "PARENT")}
-                    className={styles.button}
-                  >
-                    PARENT
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
+          ))}
+        </tbody>
+      </table>
       {/* Classrooms Section */}
       <h2>Classrooms</h2>
       {/* Formulario para crear/editar aula */}

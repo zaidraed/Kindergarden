@@ -9,8 +9,7 @@ import ProtectedRoute from "./utils/ptotectedRoute";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ResetPassword from "./components/Auth/resetPassword";
-import GoogleAuthCallback from "./features/auth/GoogleAuthCallback";
-
+import PrivateRoute from "./components/PrivateRoute";
 function App() {
   return (
     <ErrorBoundary>
@@ -20,10 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/auth/google/callback"
-              element={<GoogleAuthCallback />}
-            />
+            <Route element={<PrivateRoute />}></Route>
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<RegisterPage />} />

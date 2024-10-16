@@ -2,14 +2,12 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  Logger,
   NotFoundException,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { CreateAuthDto } from "./dto/create-auth.dto";
 import { PrismaService } from "../prisma/prisma.service";
 import { handleErrorExceptions } from "../common/handleErrorsExcepcions";
-// import { compare } from 'bcrypt'
+import { OAuth2Client } from "google-auth-library";
 import { LoginAuthDto } from "./dto/login-auth.dto";
 import { sign } from "jsonwebtoken";
 import { UpdateRoleAuthDto } from "./dto/role-auth.dto";
@@ -22,25 +20,14 @@ import {
 } from "src/common/hashing-password";
 import * as bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-
-interface GoogleUser {
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-interface TokenResponse {
-  access_token: string;
-}
+import { Role } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
-  validateToken(token: string) {
-    throw new Error("Method not implemented.");
-  }
-  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly client: OAuth2Client
   ) {}
   async create(createAuthDto: CreateAuthDto) {
     // const password = await hash(createAuthDto.password, parseInt(process.env.SALT_ROUNDS))
@@ -144,28 +131,63 @@ export class AuthService {
       data: { Active: newActiveStatus },
     });
   }
-  async googleLogin(req: {
-    user: GoogleUser | undefined;
-  }): Promise<TokenResponse> {
-    this.logger.log("Google login attempt");
-    if (!req.user) {
-      this.logger.error("No user from Google");
-      throw new UnauthorizedException("No user from Google");
+  async validateOAuthLogin(user) {
+    let userInDb = await this.prisma.users.findUnique({
+      where: { email: user.email },
+    });
+
+    if (!userInDb) {
+      // Crear el usuario si no existe
+      userInDb = await this.prisma.users.create({
+        data: {
+          email: user.email,
+          name: user.firstName,
+          password: user.password,
+        },
+      });
     }
 
-    this.logger.log("User from Google", req.user);
-
-    // Generate JWT
-    const payload = {
-      email: req.user.email,
-      sub: req.user.firstName + " " + req.user.lastName,
+    // Generar y devolver JWT
+    const payload = { email: user.email, sub: userInDb.id };
+    return {
+      access_token: this.jwtService.sign(payload),
     };
-    const token = this.jwtService.sign(payload);
+  }
 
-    this.logger.log("JWT generated");
+  async googleLogin(token: string) {
+    const ticket = await this.client.verifyIdToken({
+      idToken: token,
+      audience:
+        "566063083458-51k9fvuupd3kju0klptht1p5ocuppqu7.apps.googleusercontent.com",
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload.email;
+
+    // Lógica para buscar al usuario en la base de datos, si no existe, crearlo.
+    let user = await this.prisma.users.findUnique({ where: { email } });
+    if (!user) {
+      user = await this.prisma.users.create({
+        data: {
+          email,
+          name: payload.name,
+          googleAuthToken: token,
+          Role: Role.PARENT,
+        },
+      });
+    }
+
+    const jwtToken = this.jwtService.sign({ email: user.email, sub: user.id });
 
     return {
-      access_token: token,
+      message: "Login exitoso",
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        Role: user.Role,
+      },
+      access_token: jwtToken,
     };
   }
 

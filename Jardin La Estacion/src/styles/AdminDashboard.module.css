@@ -44,15 +44,10 @@
   background-color: #f4a15d;
 }
 
-.table-container {
-  max-height: 300px; /* Altura para mostrar alrededor de 5 filas */
-  overflow-y: auto; /* Scroll vertical */
-  margin-top: 20px;
-}
-
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
 .table th,
@@ -60,12 +55,4 @@
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid white;
-}
-
-.table th {
-  position: sticky;
-  top: 0;
-  background-color: #eb5624;
-  color: white;
-  z-index: 1;
 }
